@@ -7,7 +7,7 @@ const router = express.Router({mergeParams: true});
 
 router.post('/register', authController.register);
 
-
+router.use(authController.getAllActiveUsers);
 router.use(authController.protect);
 
 router.get('/getAllUser', userController.getAllUser);

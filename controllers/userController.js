@@ -1,7 +1,5 @@
 const User = require("./../models/userModel");
 
-
-
 exports.getAllUser = async function(req, res){
   try {
   	const getAllUser = await User.findAll();
@@ -14,6 +12,17 @@ exports.getAllUser = async function(req, res){
   	})
   }catch (err){
   	res.status(400).send(err.message);
+  }
+};
+
+
+exports.getAllActiveUsers = async (req, res, next) => {
+  try {
+    const activeUsers = await User.getActiveUsers();
+    req.activeUsers = activeUsers;
+    next();
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching active users' });
   }
 };
 

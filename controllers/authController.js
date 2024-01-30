@@ -17,7 +17,7 @@ exports.register = async function (req, res, next) {
 			lastname: req.body.lastname,
 			email: req.body.email,
 			phonenumber: req.body.phonenumber,
-			accepttedTerms: req.body.acceptedTerms,
+			acceptedTerms: req.body.acceptedTerms,
 			gender: req.body.gender,
 			country: req.body.country,
 			date_Of_Birth: req.body.date_Of_Birth,
@@ -147,13 +147,16 @@ exports.resetPassword = async function (req, res, next) {
 };
 
 
-
-
-
-
-
-
-
+exports.getAllActiveUsers = async (req, res, next) => {
+  try {
+    const activeUsers = await User.getActiveUsers();
+    console.log(activeUsers)
+    req.activeUsers = activeUsers;
+    next();
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+};
 
 
 

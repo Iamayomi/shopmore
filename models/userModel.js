@@ -28,17 +28,11 @@ const User = sq.define("user", {
 	phonenumber: {
 		type: DataTypes.STRING,
 		allowNull: false,
-		validate: { async isPhoneNumberValid(val) {
-			try {
-			  const phoneNumber = await phonenumberUtil.parsePhoneNumberCharacter(val);
-
-              if(!phoneNumber.isValidPhoneNumber()) {
-				throw new Error("Invalid phone number");
-		     	}
-			} catch(error){
-				console.log(error);
-			}
-			
+		validate: { 
+			checkVal(val) {
+	 		if (!/^\+?[0-9]+(-?[0-9]+)*$/.test(val)) {
+	 		  throw new Error('Please provide a valid phone number');
+	 		}
 		}},
 		unique: true
 	},
@@ -78,7 +72,14 @@ const User = sq.define("user", {
    acceptedTerms: {
      type: DataTypes.BOOLEAN,
 	 defaultValue: false,
-	 allowNull: false
+	 allowNull: false,
+	 validate: {
+	 	checkVal(val) {
+	 		if (val !== true) {
+	 		  throw new Error('you did not accept the Term&condition');
+	 		}
+	 	},
+	 },
 
    },
 
@@ -114,9 +115,15 @@ User.beforeCreate(async function (user) {
 	}
 });
 
-User.beforeFind(async function(){
+User.getActiveUsers = async function () {
+  try {
+    const activeUsers = await this.findAll({ where: { active: true }});
+     return activeUsers;
+  } catch (err) {
+    throw new Error('Error fetching active users');
+  }
+};
 
-});
 
 User.beforeSave(async function (user) {
 	const hashedPassword = await bcrypt.hash(user.password, 10);
