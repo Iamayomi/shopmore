@@ -1,68 +1,67 @@
 class appFeatures {
 
-	constructor(query, model){
-		this.query = query;
-		this.model = model;
+  constructor(query, model) {
+    this.query = query;
+    this.model = model;
     this.queryObj = {};
-    
-	};
+  };
 
-	filter(){
-          const queryFields = { ...this.query };
-          const filterLists = ['sortBy', 'page', 'limit', 'fields'];
+  filter() {
+    const queryFields = { ...this.query };
+    const filterLists = ['sortBy', 'page', 'limit', 'fields'];
 
-          filterLists.filter(val => delete queryFields[val]);
-          
-          this.queryObj.where = queryFields;
+    filterLists.filter(val => delete queryFields[val]);
 
-          return this;
-	};
+    this.queryObj.where = queryFields;
 
-	limiting(){
-	   if (this.query.limit) {
-          const limitFields = this.query.limit.split(',');
-          this.queryObj.attributes = limitFields;
-          this.queryObj.raw = true;
+    return this;
+  };
 
-         };
+  limiting() {
+    if (this.query.limit) {
+      const limitFields = this.query.limit.split(',');
+      this.queryObj.attributes = limitFields;
+      this.queryObj.raw = true;
 
-          return this;
+    };
 
-	};
+    return this;
 
-	sorting(){
-		 if (this.query.sortBy) {
+  };
 
-         const orderBy = 'DESC' || 'ASC';
+  sorting() {
+    if (this.query.sortBy) {
 
-         const sortBy = this.query.sortBy.split(',');
+      const orderBy = 'DESC' || 'ASC';
 
-         sortBy.push(orderBy);
-         sortBy.pop();
-        this.queryObj.order = [sortBy];
+      const sortBy = this.query.sortBy.split(',');
 
-       };
+      sortBy.push(orderBy);
+      sortBy.pop();
+      this.queryObj.order = [sortBy];
 
-        return this;
+    };
 
-	};
+    return this;
 
-	paginate(){
-  		const page = this.query.page * 1 || 1;
+  };
 
-          const limit = this.query.limit * 1 || 5;
+  paginate() {
+    const page = this.query.page * 1 || 1;
 
-          const skip = (page - 1) * limit;
+    const limit = this.query.limit * 1 || 5;
 
-           this.queryObj.limit = limit;
-           this.queryObj.offset = skip; 
+    const skip = (page - 1) * limit;
 
-          return this;
-	}
+    this.queryObj.limit = limit;
+    this.queryObj.offset = skip;
+
+    return this;
+  }
 
 
-  async searchQuery() {
-      return await this.model.findAll(this.queryObj);
+  async searchProducts() {
+    return await this.model.findAll(this.queryObj);
   }
 
 };

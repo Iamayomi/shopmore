@@ -1,48 +1,43 @@
-const { sq } = require("./../db");
 const { DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
 
-const productSchema = sq.define("product", {
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+module.exports = (sequelize) => {
 
-    price: {
-        type: DataTypes.FLOAT,
-        allowNull: false
-    },
+    const Product = sequelize.define("product", {
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
 
-    description: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+        price: {
+            type: DataTypes.FLOAT,
+            allowNull: false
+        },
 
-    category: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+        description: {
+            type: DataTypes.STRING(800),
+            allowNull: false
+        },
 
-    image: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+        category: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
 
-    rating: {
-        type: DataTypes.JSON,
-        allowNull: false
+        image: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
 
-    }
+        quantity: {
+            type: DataTypes.INTEGER,
+        },
 
-});
+        productAdded: {
+            type: DataTypes.DATE,
+        },
 
-(async function () {
-    try {
-        await productSchema.sync();
-        console.log("Products model synced")
-    } catch (err) {
-        console.error("Error syncing model", err)
-    }
-})();
+    });
+    return Product;
+};
 
-
-module.exports = productSchema;

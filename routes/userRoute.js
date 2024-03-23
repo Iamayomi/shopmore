@@ -1,21 +1,20 @@
 const express = require('express');
-const authController = require('../controllers/authController');
-const userController = require('../controllers/userController');
+const authService = require('../services/authService');
+const userService = require('../services/userService');
+const authenticate = require('../middleware/authmiddleware');
 
 
-const router = express.Router({mergeParams: true});
+const router = express.Router();
 
-router.post('/register', authController.register);
+router.post('/register', authService.register);
+router.post('/signin', authService.login);
 
-router.use(authController.getAllActiveUsers);
-router.use(authController.protect);
+// router.use(authService.getAllActiveUsers);
+router.use(authenticate.protectRoute);
 
-router.get('/getAllUser', userController.getAllUser);
-
-router.post('/signin', authController.login);
-
-router.post('/forgotPassword', authController.forgotPassword);
-router.patch('/resetPassword/:token', authController.resetPassword);
-router.delete('/deleteMyAccount', userController.deleteMe);
+router.get('/getAllUser', userService.getAllUser);
+router.post('/forgotPassword', authService.forgotPassword);
+router.patch('/resetPassword/:token', authService.resetPassword);
+router.delete('/deleteMyAccount', userService.deleteMe);
 
 module.exports = router;

@@ -1,8 +1,8 @@
 const fs = require("fs");
-const productModel = require("./models/productModel");
+// const productModel = require("./models/productModel");
 const app = require('./app');
 require('dotenv').config({ path: './config.env' });
-require('./db');
+const { Product } = require("./models/index");
 
 const port = process.env.PORT || 3000;
 
@@ -15,7 +15,7 @@ const products = JSON.parse(fs.readFileSync(`${__dirname}/data/products.js`, 'ut
 
 const importData = async () => {
 	try {
-		await productModel.bulkCreate(products);
+		await Product.bulkCreate(products);
 		console.log("product successfully imported");
 	} catch (err) {
 		console.log(err);
@@ -25,7 +25,7 @@ const importData = async () => {
 
 const deleteData = async () => {
 	try {
-		await productModel.destroy({ truncate: true });
+		await Product.destroy({ truncate: true });
 		console.log("product successfully delete");
 	} catch (err) {
 		console.log(err.message);

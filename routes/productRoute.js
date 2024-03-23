@@ -1,8 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const productsController = require("../controllers/productsController");
+const productService = require('../services/productService');
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/all-product', productsController.getAllProducts);
+
+
+router.use(authMiddleware.protectRoute);
+router.get('/all-product', productService.getAllProducts);
+router.get('/:productId', productService.getProduct);
+
 
 
 module.exports = router;

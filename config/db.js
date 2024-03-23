@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
-require('dotenv').config({ path: './config.env' });
+require('dotenv').config({ path: './config/config.env' });
 
-const sequelize = new Sequelize(process.env.PG_DATABASE, process.env.PG_USERNAME, process.env.PG_PASSWORD, { dialect: "postgres" });
+const sequelize = new Sequelize(process.env.PG_DATABASE, process.env.PG_USERNAME, process.env.PG_PASSWORD, { dialect: 'postgres' });
 
 
 const connectDatabse = async function () {
@@ -16,4 +16,4 @@ const connectDatabse = async function () {
 
 connectDatabse();
 
-module.exports = { sq: sequelize };
+module.exports = sequelize;
