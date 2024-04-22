@@ -99,13 +99,21 @@ module.exports = (sequelize) => {
 
 		passwordResetToken: {
 			type: DataTypes.STRING,
-
+			defaultValue: null
 		},
 
 		passwordResetExpires: {
 			type: DataTypes.DATE,
+			defaultValue: null
+		},
+
+		userCreatedAt: {
+			type: DataTypes.DATE,
+			defaultValue: Date.now()
 		}
 
+	},{
+		timestamps: false,
 	});
 
 	User.beforeCreate(async function (user) {
@@ -132,6 +140,7 @@ module.exports = (sequelize) => {
 	User.comparePassword = async function (signinPassword, userPassword) {
 		return await bcrypt.compare(signinPassword, userPassword);
 	};
+	
 	return User;
 };
 

@@ -2,44 +2,30 @@ const { DataTypes } = require("sequelize");
 
 
 module.exports = (sequelize) => {
-    const Paymemt = sequelize.define("order", {
-
-        // userId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'users',
-        //         key: 'id'
-        //     }
-        // },
+    const Order = sequelize.define("order", {
 
         price: {
             type: DataTypes.DECIMAL,
-            allowNull: false,
-        },
-
-        status: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            // ['pending', 'completed', 'failed']
-        },
-
-        deliveryAddress: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            // allowNull: false,
         },
 
         paymentMethod: {
             type: DataTypes.STRING,
-            allowNull: false,
+            // allowNull: false,
             // ['credit_card', 'bank_transfer', 'btc']
-        },
-        purchaseDate: {
-            type: DataTypes.DATE,
-        }
+        },  
 
+       orderAt: {
+            type: DataTypes.DATE,
+            defaultValue: Date.now()
+        },
+
+
+    },{
+        timestamps: false
     });
 
-    return Paymemt;
+    return Order;
 
 };
+

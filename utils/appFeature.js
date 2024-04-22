@@ -1,3 +1,5 @@
+const { Op } = require("sequelize");
+
 class appFeatures {
 
   constructor(query, model) {
@@ -7,12 +9,19 @@ class appFeatures {
   };
 
   filter() {
-    const queryFields = { ...this.query };
+    const queryObject = { ...this.query };
+
     const filterLists = ['sortBy', 'page', 'limit', 'fields'];
 
-    filterLists.filter(val => delete queryFields[val]);
+    filterLists.forEach(val => delete queryObject[val]);
 
-    this.queryObj.where = queryFields;
+    let name =  parseFloat(Object.values(queryObject.price));
+
+    Object.value(queryObject.price) = name;
+
+    console.log(name)
+
+    this.queryObj.where = queryObject;
 
     return this;
   };

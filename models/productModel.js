@@ -4,7 +4,7 @@ const sequelize = require("../config/db");
 module.exports = (sequelize) => {
 
     const Product = sequelize.define("product", {
-        title: {
+        name: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -19,12 +19,12 @@ module.exports = (sequelize) => {
             allowNull: false
         },
 
-        category: {
-            type: DataTypes.STRING,
-            allowNull: false
+        currency: {
+             type: DataTypes.STRING,
+             allowNull: false
         },
-
-        image: {
+              
+        imageUrl: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -33,10 +33,13 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
         },
 
-        productAdded: {
+        productAddedAt: {
             type: DataTypes.DATE,
+            defaultValue: Date.now()
         },
 
+    },{
+        timestamps: false,
     });
     return Product;
 };

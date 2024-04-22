@@ -24,8 +24,8 @@ exports.protectRoute = async function (req, res, next) {
     };
 
     function changePasswordAfter() {
-        const changeTimeStamp = parseInt(currentUser.createdAt.getTime() / 1000);
-
+        const changeTimeStamp = parseInt(currentUser.userCreatedAt.getTime() / 1000);
+// error at createdAt
         return decode.iat < changeTimeStamp;
     };
 

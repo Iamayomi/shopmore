@@ -5,6 +5,8 @@ const { Op } = require("sequelize");
 const appError = require("../utils/appError");
 const { User } = require("../models/index");
 const { createTokenCookies } = require("../utils/sendTokenCookies");
+const Email = require("../utils/email");
+// console.log(new Email(user, null));
 
 
 exports.register = async function (req, res, next) {
@@ -32,6 +34,7 @@ exports.register = async function (req, res, next) {
 
 
 exports.login = async function (req, res, next) {
+
 	const { email, password } = req.body;
 
 	if (!email || !password) {
@@ -45,6 +48,8 @@ exports.login = async function (req, res, next) {
 	};
 
 	createTokenCookies(user, 201, res);
+
+    // await new Email(user, null).welcomeMessage();
 
 };
 

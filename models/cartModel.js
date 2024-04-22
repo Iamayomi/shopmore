@@ -4,26 +4,27 @@ const { DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
     const Cart = sequelize.define("cart", {
 
-        // userId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'users',
-        //         key: 'id'
-        //     }
-        // },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'users',
+                key: 'id'
+            }
+        },
 
+        cartAddedAt: {
+            type: DataTypes.DATE,
+            defaultValue: Date.now()
+        },
 
-        // cartitemId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'cartitems',
-        //         key: 'id'
-        //     }
-        // },
+        subPrice: {
+            type: DataTypes.INTEGER
+        }
 
-    })
+    },{
+        timestamps: false,
+    });
 
     return Cart;
 

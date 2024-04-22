@@ -2,53 +2,52 @@ const { DataTypes } = require("sequelize");
 
 
 module.exports = (sequelize) => {
-    const Paymemt = sequelize.define("order", {
+    const Orderitem = sequelize.define("orderitem", {
 
-        // userId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'users',
-        //         key: 'id'
-        //     }
-        // },
+        quantity: {
+            type: DataTypes.INTEGER,
+        },
 
-        // orderId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'orders',
-        //         key: 'id'
-        //     }
-        // },
-
-        // productId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'products',
-        //         key: 'id'
-        //     }
-        // },
-
-        pricePurchase: {
+        totalPrice: {
             type: DataTypes.DECIMAL,
             allowNull: false,
+        },
+
+        status: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            // ['pending', 'completed', 'failed']
         },
 
         paymentMethod: {
             type: DataTypes.STRING,
             allowNull: false,
-            // ['credit_card', 'bank_transfer', 'btc']
+            // defaultValue: ['credit_card', 'bank_transfer', 'btc']
         },
 
-        purchaseDate: {
+        purchaseAt: {
             type: DataTypes.DATE,
-            defaultValue: true
+            defaultValue: Date.now()
         },
 
+
+    },{
+        timestamps: false
     });
 
-    return Paymemt;
+    return Orderitem;
 
 };
+
+// id
+// orderid
+// prod id
+// quantity
+
+
+
+// product
+// totalprice
+// status
+// orderDate
+// quantity

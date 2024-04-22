@@ -3,24 +3,6 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
     const Review = sequelize.define("review", {
-        // productId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'products',
-        //         key: 'id'
-        //     }
-        // },
-
-        // userId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'users',
-        //         key: 'id'
-        //     }
-        // },
-
         review: {
             type: DataTypes.STRING,
             allowNull: false
@@ -42,6 +24,8 @@ module.exports = (sequelize) => {
             type: DataTypes.DATE,
         }
 
+    },{
+        timestamps: true,
     })
 
     return Review;
