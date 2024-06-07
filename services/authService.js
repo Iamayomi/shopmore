@@ -12,20 +12,19 @@ const Email = require("../utils/email");
 exports.register = async function (req, res, next) {
 	try {
 		const createUser = await User.create({
-			firstname: req.body.firstname,
-			lastname: req.body.lastname,
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
 			email: req.body.email,
-			phonenumber: req.body.phonenumber,
+			phoneNumber: req.body.phoneNumber,
 			acceptedTerms: req.body.acceptedTerms,
 			gender: req.body.gender,
 			country: req.body.country,
-			date_Of_Birth: req.body.date_Of_Birth,
+			dateOfBirth: req.body.dateOfBirth,
 			password: req.body.password,
 			confirmPassword: req.body.confirmPassword
 		});
 
-
-		createTokenCookies(createUser, 201, res);
+	createTokenCookies(createUser, 201, res);
 
 	} catch (err) {
 		res.status(401).json(err.message);
@@ -67,15 +66,15 @@ exports.forgotPassword = async function (req, res, next) {
 
 	const resetToken = crypto.randomBytes(32).toString('hex');
 
-	user.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+	user.password_reset_token = crypto.createHash('sha256').update(resetToken).digest('hex');
 
-	user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+	user.password_reset_expires = Date.now() + 10 * 60 * 1000;
 
 	await user.save();
 
 	res.status(201).json({
-		message: user.passwordResetToken,
-		date: user.passwordResetExpires
+		message: user.password_reset_token,
+		date: user.password_reset_expires
 	});
 
 };
@@ -99,7 +98,6 @@ exports.resetPassword = async function (req, res, next) {
 	await user.save();
 
 	createTokenCookies(user, 200, res);
-
 
 };
 

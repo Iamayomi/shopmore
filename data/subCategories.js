@@ -1,21 +1,21 @@
 [
 	{
-		"subCategory_name": "Men's",
-		"CategoryId": 1
+		"subCategoryName": "Men's",
+		"categoryId": 1
 	},
 
 	{
-		"subCategory_name": "Computers & Laptops",
-		"CategoryId": 2
+		"subCategoryName": "Computers & Laptops",
+		"categoryId": 2
 	},
 
 	{
-		"subCategory_name": "Accessories",
-		"CategoryId": 2
+		"subCategoryName": "Accessories",
+		"categoryId": 2
 	},
 
 	{
-		"subCategory_name": "Skincare",
-		"CategoryId": 3
+		"subCategoryName": "Skincare",
+		"categoryId": 3
 	}
 ]

@@ -14,15 +14,8 @@ const Category = require("./categoryModel")(sequelize);
 const subCategory = require("./subCategoryModel")(sequelize);
 
 
-
-// User.hasMany(Order);
-// Order.belongsTo(User);
-
 Order.hasMany(Orderitem);
 Orderitem.belongsTo(Order);
-
-// Order.hasOne(Payment);
-// Payment.belongsTo(Order);
 
 Product.hasOne(Orderitem);
 Orderitem.belongsTo(Payment);
@@ -45,11 +38,10 @@ DeliveryAddress.belongsTo(Order);
 User.hasMany(Order);
 Order.belongsTo(User);
 
-
 Category.hasMany(subCategory);
 subCategory.belongsTo(Category);
 
-subCategory.hasOne(Product);
+subCategory.hasMany(Product);
 Product.belongsTo(subCategory);
 
 // Payment.hasOne(CardPayment);
@@ -63,3 +55,6 @@ sequelize.sync({ alter: true }).then(() => {
 
 module.exports = { User, Cart, Review, Product, Payment, Category,
 subCategory, DeliveryAddress, CardPayment, CartItem, Order, Orderitem };
+
+
+

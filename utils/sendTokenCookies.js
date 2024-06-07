@@ -6,7 +6,7 @@ const signToken = function (id) {
 
 
 exports.createTokenCookies = function (user, statusCode, res) {
-    const token = signToken(user.id);
+    const token = signToken(user.user_id);
 
     const cookiesOption = {
         expires: new Date(Date.now() + process.env.JWT_COOKIES_EXPIRES_IN * 24 * 60 * 60 * 1000),

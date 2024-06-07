@@ -10,6 +10,7 @@ app.listen(port, () => {
 	console.log(`server succesfully connected at ${port}`)
 });
 
+
 // const products = JSON.parse(fs.readFileSync(`${__dirname}/data/subCategories.js`, 'utf-8'));
 // const products = JSON.parse(fs.readFileSync(`${__dirname}/data/Category.js`, 'utf-8'));
 const products = JSON.parse(fs.readFileSync(`${__dirname}/data/products.js`, 'utf-8'));

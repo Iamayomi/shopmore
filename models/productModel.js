@@ -1,9 +1,22 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 
+const generateRandomId = function () {
+    return Math.floor(Math.random() * 10000000);
+};
+
+
 module.exports = (sequelize) => {
 
     const Product = sequelize.define("product", {
+
+        // productId: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        //     primaryKey: true,
+        //     defaultValue: () => generateRandomId()
+        // },
+
         name: {
             type: DataTypes.STRING,
             allowNull: false

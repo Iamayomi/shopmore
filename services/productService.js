@@ -1,5 +1,6 @@
+const sequelize = require("../config/db");
 const { Product, Category, subCategory } = require("../models/index");
-const appFeature = require("../utils/appFeature");
+const AppFeature = require("../utils/appFeature");
 const appError = require("./../utils/appError");
 
 
@@ -23,12 +24,12 @@ exports.getProduct = async function (req, res, next) {
 };
 
 exports.getAllProducts = async function (req, res, next) {
-     try {
 
-          const appProperties = new appFeature(req.query, Product);
-          appProperties.filter().limiting().sorting().paginate();
+       try {
 
-          const products = await appProperties.searchProducts();
+          const appProperties = new AppFeature(req.query).filter();
+
+          let products = await appProperties.search();
 
           res.status(200).json({
                status: "SUCCESS",
@@ -40,5 +41,32 @@ exports.getAllProducts = async function (req, res, next) {
      } catch (err) {
           next(new appError(`${err.message}`, 400));
      }
+
+     // try {
+
+     //      const appProperties = new appFeature(req.query, Product);
+     //      appProperties.filter().limiting().sorting().paginate();
+
+     //      let products = await appProperties.searchProducts();
+
+     //      const queryStr = JSON.stringify(req.query);
+
+     //      if(queryStr.match(/\b(gte|gt|lte|lt)\b/g)){
+     //          products = await sequelize.query(`SELECT * FROM products WHERE price <= '100'`);
+     //           console.log(products)
+
+     //      }
+
+
+     //      res.status(200).json({
+     //           status: "SUCCESS",
+     //           total: products.length,
+     //           data: {
+     //                products: products
+     //           }
+     //      })
+     // } catch (err) {
+     //      next(new appError(`${err.message}`, 400));
+     // }
 
 };

@@ -1,9 +1,17 @@
 const { DataTypes } = require("sequelize");
 
+const generateRandomId = function () {
+    return Math.floor(Math.random() * 10000000);
+};
 
 module.exports = (sequelize) => {
     const Creditcard = sequelize.define("creditcard", {
-
+        //   creditcardId: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        //     primaryKey: true,
+        //     defaultValue: () => generateRandomId()
+        // },
         // paymentId: {
         //     type: DataTypes.INTEGER,
         //     allowNull: false,
@@ -53,7 +61,7 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
 
-        lastfourDigit: {
+        lastFourDigit: {
             type: DataTypes.STRING,
             allowNull: false,
         }
