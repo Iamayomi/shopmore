@@ -15,7 +15,7 @@ exports.protectRoute = async function (req, res, next) {
         return next(new appError("You are not logged in! Please login to get accsss", 401));
     };
 
-    const decode = await jwt.verify(token, process.env.JWT_SECRET);
+    const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
     const currentUser = await User.findByPk(decode.id);
 

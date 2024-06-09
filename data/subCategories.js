@@ -5,7 +5,7 @@
 	},
 
 	{
-		"subCategoryName": "Computers & Laptops",
+		"subCategoryName": "Computers and Laptops",
 		"categoryId": 2
 	},
 

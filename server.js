@@ -45,7 +45,7 @@ if (process.argv[2] === '--import') {
 }
 
 if (process.argv[2] === '--delete') {
-	// deleteData(Product);
+	deleteData(Product);
 	// deleteData(Category);
 	// deleteData(subCategory);
 }

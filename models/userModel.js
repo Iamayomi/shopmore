@@ -2,19 +2,9 @@ const { DataTypes } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
 
-const generateRandomId = function () {
-	return Math.floor(Math.random() * 10000000);
-} 
-
 module.exports = (sequelize) => {
 
 	const User = sequelize.define("user", {
-   //      userId: {
-   //      	type: DataTypes.INTEGER,
-			// allowNull: false,
-   //      	primaryKey: true,
-   //      	defaultValue: () => generateRandomId()
-   //      },
 
 		firstName: {
 			type: DataTypes.STRING,
