@@ -27,9 +27,9 @@ exports.getAllProducts = async function (req, res, next) {
 
        try {
 
-          const appProperties = new AppFeature(req.query).filter();
+          const appProperties = new AppFeature(req.query).filter().sort().paginate().limit();
 
-          let products = await appProperties.search();
+          let products = await appProperties.searchProducts();
 
           res.status(200).json({
                status: "SUCCESS",

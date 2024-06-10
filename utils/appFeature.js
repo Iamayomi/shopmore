@@ -1,12 +1,15 @@
 const sequelize = require("../config/db");
 
 
-module.exports = class AppFeatures{
+module.exports = class AppFeatures {
 
   constructor(query, model) {
     this.query = query;
     this.model = model;
-    this.queryList = [];
+    this.filterQuery = [];
+    this.querySort = [];
+    this.queryPaginate = [];
+    this.queryLimit = [];
   };
 
   filter() {
@@ -17,40 +20,37 @@ module.exports = class AppFeatures{
     filterLists.forEach(val => delete queryObject[val]);
   
     const searchObjectKey = Object.keys(queryObject);
-    console.log(searchObjectKey)
 
-    function priceOperator(OP){
+    function priceOperator(price, filterQuery){
          const operators = { gt: '>', gte: '>=', lt: '<', lte: '<=' };
-          
-          for(const key in Op) {
-            if(Op.hasOwnProperty(key) && operators[key]){
-               this.queryList.push(`price ${( operators[key] )} ${( Op[key] )}`);
+
+          for(const key in price) {
+            if(price.hasOwnProperty(key) && operators[key]){
+                filterQuery.push(`price ${( operators[key] )} ${( price[key] )}`);
+            } else {
+                 filterQuery.push(`price = '${ price }'`);
             }
+
           };
 
-          if(!Object.Values(price)) {
-         this.queryList.push(`price = ${( Op[key])}`);
-          }
+          return filterQuery;
     };
  
     for(const searchKey of searchObjectKey){
-      if(searchKey === 'price'){
-          const price = queryObject[searchKey];       
-          operatorPrice(price);
-
+      if(searchKey === 'price'){       
+          priceOperator(queryObject[searchKey], this.filterQuery);
       }
       if(searchKey === 'name') {
           const name = queryObject[searchKey];
-          this.queryList.push(`name = '${name}'`);
+          this.filterQuery.push(`name = "${name}"`);
       }
       if(searchKey === 'category'){
           const category = queryObject[searchKey];
-            this.queryList.push(`c."categoryName" = '${category}'`);
+            this.filterQuery.push(`c."categoryName" = "${category}"`);
       }
       if(searchKey === 'subcategory'){
           const subcategory = queryObject[searchKey];
-          console.log(subcategory)
-            this.queryList.push(`s."subCategoryName" = '${subcategory}'`);
+            this.filterQuery.push(`s."subCategoryName" = "${subcategory}"`);
       }
     }
 
@@ -58,82 +58,71 @@ module.exports = class AppFeatures{
     return this;
   };
 
+  sort(){
+      if(this.query.sort) {
+        const splitSort = this.query.sort.split(',');
+        let sort = [];
 
-   async search() {
+        splitSort.forEach(val => {
+            if(val.includes('-')) {
+              sort.push(` ${val.replace('-', '')} DESC`);
+            }else{ 
+              sort.push(` ${val} ASC`);
+            };
+         });
+
+      this.querySort.push(` ORDER BY ${sort}`);
+
+    };
+
+      return this;
+  };
+
+  limit(){
+    if(this.query.limit){
+
+      const splitLimit = this.query.limit.split(',');
+
+      splitLimit.forEach(val => {
+           this.queryLimit.push(`p."${val}" AS ${val}`);
+      });
+    };
+
+    return this;
+  };
+
+
+  paginate(){
+
+    const page = this.query.page * 1 || 1;
+
+    const limit = this.query.limit * 1 || 2;
+
+    const skip = (page - 1) * limit;
+
+    this.queryPaginate.push(` LIMIT ${limit} OFFSET ${skip}`)
+
+    return this;
+
+  };
+
+
+   async searchProducts() {
 
     let searchQuery = `SELECT p.*, s.id AS subcategoryId, s."subCategoryName" AS subcategoryName, c.id AS categoryId, c."categoryName" AS categoryName FROM products p JOIN subcategories s ON p."subcategoryId" = s.id JOIN categories c ON s."categoryId" = c.id `;
+    
+    searchQuery = (this.queryLimit.length > 0) ? searchQuery = searchQuery.replace('p.*', this.queryLimit) : searchQuery += '';
 
-    if(this.queryList.length > 0){
-         searchQuery += ' WHERE ' + this.queryList.join(' AND ');
-    }
+  
+     searchQuery = (this.filterQuery.length > 0) ? searchQuery += ' WHERE ' + this.filterQuery.join(' AND ') + this.querySort :  searchQuery += this.querySort + this.queryPaginate;
+
+  
 
      return await sequelize.query(searchQuery);
   };
 
 };
 
-
-// const sequelize = require("../config/db");
-
-// module.exports = class AppFeatures {
-//   constructor(query, model) {
-//     this.query = query;
-//     this.model = model;
-//     this.queryList = [];
-//   };
-
-//   filter() {
-//     const queryObject = { ...this.query };
-//     const filterLists = ['sortBy', 'page', 'limit', 'fields'];
-    
-//     filterLists.forEach(val => delete queryObject[val]);
-    
-//     const searchObjectKey = Object.keys(queryObject);
-
-//     searchObjectKey.forEach(searchKey => {
-//       switch (searchKey) {
-//         case 'price':
-//           this.handlePriceQuery(queryObject[searchKey]);
-//           break;
-//         case 'name':
-//           this.queryList.push(`name = '${queryObject[searchKey]}'`);
-//           break;
-//         case 'category':
-//           this.queryList.push(`c."categoryName" = '${queryObject[searchKey]}'`);
-//           break;
-//         case 'subcategory':
-//           this.queryList.push(`s."subCategoryName" = '${queryObject[searchKey]}'`);
-//           break;
-//         default:
-//           break;
-//       }
-//     });
-
-//     return this;
-//   };
-
-//   handlePriceQuery(priceQuery) {
-//     const { gt, gte, lt, lte } = priceQuery;
-//     const operators = { gt: '>', gte: '>=', lt: '<', lte: '<=' };
-    
-//     for (const key in operators) {
-//       if (priceQuery.hasOwnProperty(key) && priceQuery[key]) {
-//         this.queryList.push(`price ${operators[key]} ${priceQuery[key]}`);
-//       }
-//     }
-
-//     if (!Object.values(priceQuery).some(val => val)) {
-//       this.queryList.push(`price = '${priceQuery}'`);
-//     }
-//   }
-
-//   async search() {
-//     const searchQuery = `SELECT p.*, s.id AS subcategoryId, s."subCategoryName" AS subcategoryName, c.id AS categoryId, c."categoryName" AS categoryName FROM products p JOIN subcategories s ON p."subcategoryId" = s.id JOIN categories c ON s."categoryId" = c.id ` + this.queryList.join(' AND ');
-    
-//     console.log(searchQuery);
-//     return await sequelize.query(searchQuery);
-//   };
-// };
 
 // class appFeatures {
 
