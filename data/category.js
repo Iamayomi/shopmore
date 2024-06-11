@@ -1,5 +1,5 @@
 [
 	{ "categoryName": "Clothing" },
 	{ "categoryName": "Electronics" },
-	{ "categoryName": "Health & Beauty" }
+	{ "categoryName": "Health and Beauty" }
 ]

@@ -27,38 +27,35 @@ module.exports = class AppFeatures {
           for(const key in price) {
             if(price.hasOwnProperty(key) && operators[key]){
                 filterQuery.push(`price ${( operators[key] )} ${( price[key] )}`);
-            } else {
-                 filterQuery.push(`price = '${ price }'`);
-            }
+            }          
 
           };
 
           return filterQuery;
     };
  
-    for(const searchKey of searchObjectKey){
-      if(searchKey === 'price'){       
-          priceOperator(queryObject[searchKey], this.filterQuery);
-      }
-      if(searchKey === 'name') {
-          const name = queryObject[searchKey];
-          this.filterQuery.push(`name = "${name}"`);
-      }
-      if(searchKey === 'category'){
-          const category = queryObject[searchKey];
-            this.filterQuery.push(`c."categoryName" = "${category}"`);
-      }
-      if(searchKey === 'subcategory'){
-          const subcategory = queryObject[searchKey];
-            this.filterQuery.push(`s."subCategoryName" = "${subcategory}"`);
-      }
-    }
+    searchObjectKey.forEach(val => { 
+        if(val === 'price'){       
+            priceOperator(queryObject[val] ,this.filterQuery);
+        }
+        this.filterQuery.push(`price = '${price}'`);
+    })
 
+    function otherObject(filterQuery, value) {
+      searchObjectKey.forEach(val => {
+        if(val === value){
+           return filterQuery.push(`${ value === 'category'  ? 'c."categoryName"' : value }  ILIKE '%${queryObject[val]}%'`);
+        }
+      });
+    };
+
+    ['name', 'category', 'category'].forEach(val =>  otherObject(this.filterQuery, val));
+   
 
     return this;
   };
 
-  sort(){
+  sort() {
       if(this.query.sort) {
         const splitSort = this.query.sort.split(',');
         let sort = [];
@@ -112,11 +109,8 @@ module.exports = class AppFeatures {
     let searchQuery = `SELECT p.*, s.id AS subcategoryId, s."subCategoryName" AS subcategoryName, c.id AS categoryId, c."categoryName" AS categoryName FROM products p JOIN subcategories s ON p."subcategoryId" = s.id JOIN categories c ON s."categoryId" = c.id `;
     
     searchQuery = (this.queryLimit.length > 0) ? searchQuery = searchQuery.replace('p.*', this.queryLimit) : searchQuery += '';
-
   
      searchQuery = (this.filterQuery.length > 0) ? searchQuery += ' WHERE ' + this.filterQuery.join(' AND ') + this.querySort :  searchQuery += this.querySort + this.queryPaginate;
-
-  
 
      return await sequelize.query(searchQuery);
   };
