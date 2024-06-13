@@ -1,10 +1,6 @@
 const { DataTypes } = require("sequelize");
 
 
-const generateRandomId = function () {
-    return Math.floor(Math.random() * 10000000);
-}; 
-
 module.exports = (sequelize) => {
     const Review = sequelize.define("review", {
         //  reviewId: {
@@ -20,12 +16,12 @@ module.exports = (sequelize) => {
         },
 
         rating: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.FLOAT,
             allowNull: false,
             validate: {
                 checKrating(val) {
-                    if (val < 5) {
-                        throw new Error('rating must not greater than ');
+                    if (val > 5.0) {
+                        throw new Error('rating must not greater than 5.0');
                     }
                 }
             }
@@ -33,10 +29,11 @@ module.exports = (sequelize) => {
 
         reviewDate: {
             type: DataTypes.DATE,
+            defaultValue: Date.now()
         }
 
     },{
-        timestamps: true,
+        timestamps: false,
     })
 
     return Review;

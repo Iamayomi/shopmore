@@ -2,7 +2,6 @@ const { Cart, Product, User, CartItem } = require("../models/index");
 const appError = require("./../utils/appError");
 
 
-
 exports.addToCart = async function (req, res, next) {
   
   try {
@@ -19,38 +18,31 @@ exports.addToCart = async function (req, res, next) {
          product = await Product.findByPk(req.params.productId * 1);
 
          addCart = await CartItem.create({ cartId: cart.id, productId: product.id, quantity });
+
     } else {
-       product = await Product.findByPk(req.params.productId * 1);
+        product = await Product.findByPk(req.params.productId * 1);
 
-       const existingProduct = await CartItem.findOne({ where: { productId: product.id }});
+        const existProduct = await CartItem.findOne({ where: { productId: product.id }});
 
-       if(existingProduct){
-         existingProduct.quantity += quantity;
-        addCart =  await existingProduct.save();
+       if(existProduct) {
+
+         existProduct.quantity += quantity;
+
+         ddCart = await existProduct.save();
        } else {
        
-        addCart = await CartItem.create({ cartId: user.id, productId: product.id, quantity });
+         addCart = await CartItem.create({ cartId: user.id, productId: product.id, quantity });
 
        }
         
     };
 
-    const caRt = await CartItem.findAll({ where: { cartId: req.user.id }, include: Product});
-    let list = [];
+    const userCartitem = await CartItem.findAll({ where: { cartId: req.user.id }, include: Product });
 
-    caRt.forEach(val => list.push(val.product.price) );
-
-    let sum = 0;
-
-    for(let i = 0; i < list.length; i++){
-        sum += list[i];
-    }
-
-
-     res.status(201).json({
+    res.status(201).json({
       status: "SUCCESS",
       data: {
-         addCart
+         userCartitem
       }
     });
 
@@ -66,20 +58,41 @@ exports.addToCart = async function (req, res, next) {
 exports.getCart = async function (req, res, next) {
   try {
 
-    // if(!req.body.user) req.params.userId = req.userId.id;
 
-    const getCart = await Cart.findAll({where: { userId: req.user.id},  include: { model: CartItem, include: [Product] } });
-    // const getCart = await User.findOne({  include: [Cart]});
+  const allProductCart = await Cart.findOne({ where: { userId: req.user.id},  include: { model: CartItem, include: [Product] } });
 
-    // include: { model: Cart, include: { model: CartItem, include: [Product] } 
-    res.status(200).json({
+
+  let { cartitems, subprice } = allProductCart;
+
+  console.log(cartitems)
+
+  let priceList = [], quantity;
+
+  cartitems.forEach(products => {
+
+    const { price } = products.product;
+
+    quantity = products.quantity;
+
+    priceList.push(price);
+
+  });
+  
+  const totalPrice = priceList.reduce((acc, cur) => acc + cur, 0);
+
+  allProductCart.subprice = totalPrice * quantity;
+
+  allProductCart.save();
+ 
+
+  res.status(200).json({
       status: "SUCCESS",
       data: {
-        getCart
+        allProductCart
       }
     })
   } catch (err) {
-  return  next(new appError(`${err.message}`, 400));
+     return  next(new appError(`${err.message}`, 400));
   }
 
 };

@@ -4,7 +4,7 @@ const appError = require("./../utils/appError");
 
 // get a cartitem
 
-exports.getCartitem =  async function(req, res, next){
+exports.getCartItem =  async function(req, res, next){
     try{
 
         const cart = await Cart.findOne({where: { userId: req.user.id}});
@@ -32,7 +32,7 @@ exports.getCartitem =  async function(req, res, next){
 };
 
 
-exports.delCartitem = async function (req, res, next) {
+exports.delCartItem = async function (req, res, next) {
     try {
 
         const cart = await Cart.findOne({where: { userId: req.user.id}});

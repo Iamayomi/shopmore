@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const cartitemService = require('../services/cartitemService');
-const authenticate = require('../middleware/authmiddleware');
+const cartItemService = require('../services/cartItemService');
+const authenticate = require('../middleware/authMiddleware');
 
 
 
 router.use(authenticate.protectRoute);
-router.delete("/:productId/delete-user-cartitem", cartitemService.delCartitem);
-router.get("/:productId/get-user-cartitem", cartitemService.getCartitem);
+router.delete("/:productId/delete-user-cartitem", cartItemService.delCartItem);
+router.get("/:productId/get-user-cartitem", cartItemService.getCartItem);
 
 
 

@@ -1,45 +1,57 @@
-const nodemailer = require("nodemailer");
 
-module.exports = class Email {
-	   constructor(user, url) {
-        this.to = user.email;
-        this.firstName = user.firstName;
-        this.url = url;
-        this.from = `Shopmore <${process.env.EMAIL_FROM}>`;
-    };
+// const AWS = require("aws-sdk");
+
+// const nodemailer = require("nodemailer");
+
+// module.exports = class Email {
+// 	   constructor(user, url) {
+//         this.to = user.email;
+//         this.firstName = user.firstName;
+//         this.url = url;
+//         this.from = `Shopmore Shopping Site<${process.env.EMAIL_FROM}>`;
+//     };
+// // olojedechristopher24@gmail.com
+
+//     transporter(){
+//     	return nodemailer.createTransport({
+//         	 host: 
+//              post: 587, 
+//              secure: false,
+//              auth: {
+//                 user: 
+//                 password:
+//              }
+//              })
+//     	});
+//     };
 
 
-    transport(){
-    	return nodemailer.createTransport({
-    	    host: process.env.EMAIL_HOST,
-            port: process.env.EMAIL_PORT,
-            auth: {
-                user: process.env.EMAIL_USERNAME,
-                pass: process.env.EMAIL_PASSWORD
-            }
+// 	async sendEmail(subject){
 
-    	});
-    };
+// 		const mailOption = {
+// 			from: this.form,
+// 			to: this.to,
+// 			subject,
+//             text: 'testing AWS SES email'
+// 		};
 
-	async sendEmail(){
+// 		await this.transporter().sendMail(mailOption, (err, info) => {
+//             if(err){
+//                 return console.log('Error', err);
+//             }
+//          console.log('Email sent successfully: ', info.response);
 
-		const mailOption = {
-			from: this.form,
-			to: this.to,
-			// subject
-		};
+//         });
+// 	};
 
-		await this.transport().sendMail(mailOption);
-	};
+// 	async welcomeMessage(){
+// 		await this.sendEmail(`Welcome to shopmore ${this.firstName}`)
+// 	};
 
-	async welcomeMessage(){
-		await this.sendEmail("Welcome to SHOPMORE !!!")
-	};
+// 	async sendPasswordReset(){
+//         await this.send('Your password reset token will Expires in 10mins');
+//     };
 
-	async sendPasswordReset(){
-        await this.send('Your password reset token will Expires in 10mins');
-    };
+// };
 
-};
-
-// how can i get the name and location of user signin so that sene email to thr user
+// // how can i get the name and location of user signin so that sene email to thr user

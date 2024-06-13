@@ -7,9 +7,10 @@ const globalErrorHandler = require('./services/errorService.js');
 const userRoute = require('./routes/userRoute');
 const productRoute = require('./routes/productRoute');
 const cartRoute = require('./routes/cartRoute');
-const cartitemRoute = require('./routes/cartitemRoute');
-const orderitemRoute = require('./routes/orderitemsRoute');
+const cartItemRoute = require('./routes/cartItemRoute');
+const orderItemRoute = require('./routes/orderItemsRoute');
 const deliveryAddressRoute = require('./routes/deliveryAddressRoute');
+const reviewRoute = require('./routes/reviewRoute');
 
 
 
@@ -32,12 +33,16 @@ app.use(express.json({ limit: '10kb' }));
 
 
 app.use("/shopmore/users", userRoute);
+
 app.use("/shopmore/v1/products", productRoute);
 
-app.use("/shopmore/carts", cartRoute);
-app.use("/shopmore/cart-items", cartitemRoute);
+app.use("/shopmore/reviews", reviewRoute);
 
-app.use("/shopmore/order-items", orderitemRoute);
+
+app.use("/shopmore/carts", cartRoute);
+app.use("/shopmore/cart-items", cartItemRoute);
+
+app.use("/shopmore/order-items", orderItemRoute);
 
 app.use("/shopmore/delivery-address", deliveryAddressRoute);
 

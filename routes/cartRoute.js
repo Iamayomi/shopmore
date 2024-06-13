@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true});
 const cartService = require('../services/cartService');
-const authenticate = require('../middleware/authmiddleware');
+const authenticate = require('../middleware/authMiddleware');
 
 
 router.use(authenticate.protectRoute);

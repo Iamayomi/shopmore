@@ -5,8 +5,7 @@ const { Op } = require("sequelize");
 const appError = require("../utils/appError");
 const { User } = require("../models/index");
 const { createTokenCookies } = require("../utils/sendTokenCookies");
-const Email = require("../utils/email");
-// console.log(new Email(user, null));
+// const Email = require("../utils/email");
 
 
 exports.register = async function (req, res, next) {
@@ -24,7 +23,11 @@ exports.register = async function (req, res, next) {
 			confirmPassword: req.body.confirmPassword
 		});
 
-	createTokenCookies(createUser, 201, res);
+	    createTokenCookies(createUser, 201, res);
+
+	    // if(createUser.id){
+		   // const email = new Email(createUser, null).welcomeMessage();
+	    // };
 
 	} catch (err) {
 		res.status(401).json(err.message);

@@ -39,8 +39,8 @@ exports.registerDeliveryAddress = async function (req, res, next) {
 		res.status(400).send(err.message);
 	}
 
-
 };
+
 
 exports.getDeliveryAddress = async function (req, res, next) {
 	try {

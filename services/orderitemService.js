@@ -1,7 +1,7 @@
 const { Product, Orderitem, Payment } = require("../models/index");
 const AppError = require("./../utils/AppError")
 
-exports.addToOderitems = async function(req, res, next){
+exports.addToOderItems = async function(req, res, next){
 
 	const { quantity, totalPrice } = req.body;
 

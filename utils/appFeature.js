@@ -27,18 +27,18 @@ module.exports = class AppFeatures {
           for(const key in price) {
             if(price.hasOwnProperty(key) && operators[key]){
                 filterQuery.push(`price ${( operators[key] )} ${( price[key] )}`);
-            }          
-
+            }else{
+              filterQuery.push(`price = ${ key }`);
+            }
           };
-
-          return filterQuery;
+            
+          // return filterQuery;
     };
  
     searchObjectKey.forEach(val => { 
         if(val === 'price'){       
-            priceOperator(queryObject[val] ,this.filterQuery);
+            priceOperator(queryObject[val], this.filterQuery);
         }
-        this.filterQuery.push(`price = '${price}'`);
     })
 
     function otherObject(filterQuery, value) {
