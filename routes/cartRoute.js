@@ -5,9 +5,9 @@ const authenticate = require('../middleware/authMiddleware');
 
 
 router.use(authenticate.protectRoute);
-router.post('/add-to-carts/:productId', cartService.addToCart);
-router.get('/get-user-carts', cartService.getCart);
-router.delete('/delete-user-carts', cartService.delACart);
+router.post('/:productId/add-to-cart', cartService.addToCart);
+router.get('/get-user-cart', cartService.getCart);
+router.delete('/delete-user-cart', cartService.delACart);
 
 
 

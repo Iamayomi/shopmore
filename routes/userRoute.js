@@ -12,9 +12,13 @@ router.post('/signin', authService.login);
 // router.use(authService.getAllActiveUsers);
 router.use(authenticate.protectRoute);
 
-router.get('/getAllUser', userService.getAllUser);
+// router.get('/getAllUser', userService.getAllUser);
 router.post('/forgotPassword', authService.forgotPassword);
 router.patch('/resetPassword/:token', authService.resetPassword);
-router.delete('/deleteMyAccount', userService.deleteMe);
+
+router.patch('/changePassword', userService.changePassword);
+router.patch('/deleteMyAccount', userService.deleteMe);
+router.patch('/updateMyAccount', userService.updateMe);
+
 
 module.exports = router;

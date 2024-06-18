@@ -5,8 +5,7 @@ const appError = require("./../utils/appError");
 
 exports.addProductReview = async function(req, res, next){
 	try{
-		// if(req.body.productId) req.body.productId = req.params.productId;
-
+       
 		console.log(req.params.productId)
 
 		const addReview = await Review.create({

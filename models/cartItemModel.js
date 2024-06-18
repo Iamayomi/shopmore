@@ -10,6 +10,15 @@ module.exports = (sequelize) => {
         //     defaultValue: () => generateRandomId()
         // },
 
+        // id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        //     references: {
+        //         model: 'users',
+        //         key: 'id'
+        //     }
+        // },
+
         quantity: {
             type: DataTypes.INTEGER,
             allowNull: false,

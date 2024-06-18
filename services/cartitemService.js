@@ -7,7 +7,7 @@ const appError = require("./../utils/appError");
 exports.getCartItem =  async function(req, res, next){
     try{
 
-        const cart = await Cart.findOne({where: { userId: req.user.id}});
+        const cart = await Cart.findOne({ where: { userId: req.user.id}});
 
         if(!cart){
            return next(new appError("Cart with is this user is not found", 404));

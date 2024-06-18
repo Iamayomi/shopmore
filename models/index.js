@@ -14,14 +14,17 @@ const Category = require("./categoryModel")(sequelize);
 const subCategory = require("./subCategoryModel")(sequelize);
 
 
-Order.hasMany(Orderitem);
-Orderitem.belongsTo(Order);
+// Order.hasMany(Orderitem);
+// Orderitem.belongsTo(Order);
 
-Product.hasOne(Orderitem);
-Orderitem.belongsTo(Payment);
+// Product.hasOne(Orderitem);
+// Orderitem.belongsTo(Payment);
 
-Cart.hasMany(CartItem);
+Cart.hasOne(CartItem);
 CartItem.belongsTo(Cart);
+
+// CartItem.hasOne(User);
+// User.belongsTo(CartItem);
 
 Product.hasMany(CartItem);
 CartItem.belongsTo(Product);
@@ -29,8 +32,8 @@ CartItem.belongsTo(Product);
 Product.hasMany(Review);
 Review.belongsTo(Product);
 
-User.hasOne(Cart);
-Cart.belongsTo(User);
+User.hasOne(Cart, { foreignKey: 'userId'});
+Cart.belongsTo(User, { foreignKey: 'userId'});
 
 Order.hasMany(DeliveryAddress);
 DeliveryAddress.belongsTo(Order);

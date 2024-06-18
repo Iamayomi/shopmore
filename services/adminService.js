@@ -1,46 +1,31 @@
-const { Product, Category, subCategory } = require("./models/index");
+const { User, Review, Product, Category, subCategory } = require("./models/index");
 // delete user
 // delete product
 // update user profile
 // update products
 // create products
+// get all user payment
+// all user ==
+// get sell out product and remaining
+// get review
+// create admin
 
+// const delUser = async function(){
 
-// const products = JSON.parse(fs.readFileSync(`${__dirname}/data/subCategories.js`, 'utf-8'));
-// const products = JSON.parse(fs.readFileSync(`${__dirname}/data/Category.js`, 'utf-8'));
-const products = JSON.parse(fs.readFileSync(`${__dirname}/data/products.js`, 'utf-8'));
+// }
 
-// console.log(products)
+exports.getAllUser = async function (req, res) {
+  try {
+    const getAllUser = await User.findAll();
 
-const importData = async (name) => {
-	try {
-		await name.bulkCreate(products);
-		console.log("product successfully imported");
-	} catch (err) {
-		console.log(err);
-	}
+    res.status(200).json({
+      status: "succes",
+      data: {
+        users: getAllUser
+      }
+    })
+  } catch (err) {
+    next(new appError(`${err.message}`, 400));
+  }
+
 };
-
-
-const deleteData = async (name) => {
-	try {
-		await name.destroy({ truncate: true });
-		console.log("product successfully delete");
-	} catch (err) {
-		console.log(err.message);
-	}
-};
-
-
-if (process.argv[2] === '--import') {
-	importData(Product);
-	// importData(Category);
-	// importData(subCategory);
-
-}
-
-if (process.argv[2] === '--delete') {
-	deleteData(Product);
-	// deleteData(Category);
-	// deleteData(subCategory);
-}

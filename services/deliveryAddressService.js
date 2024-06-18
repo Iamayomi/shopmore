@@ -5,20 +5,21 @@ exports.registerDeliveryAddress = async function (req, res, next) {
 	try {
 		let registerDeliveryAddress;
 
-		const { firstname, lastname, phoneNumber, deliveryAddress, additionalInfo, region, city } = req.body;
+		const { firstName, lastName, phoneNumber, deliveryAddress, additionalInfo, region, city } = req.body;
 
 		const getDeliveryAddress = await DeliveryAddress.findOne();
 
+		console.log(getDeliveryAddress)
 		if (getDeliveryAddress === null) {
 			registerDeliveryAddress = await DeliveryAddress.create({
-				firstname, lastname, phoneNumber,
+				firstName, lastName, phoneNumber,
 				deliveryAddress, additionalInfo, region, city
 			});
 
 		} else {
 			registerDeliveryAddress = await DeliveryAddress.findOne({ where: { id: getDeliveryAddress.id } });
-			registerDeliveryAddress.firstname = firstname,
-				registerDeliveryAddress.lastname = lastname,
+			registerDeliveryAddress.firstName = firstName,
+				registerDeliveryAddress.lastName = lastName,
 				registerDeliveryAddress.phoneNumber = phoneNumber,
 				registerDeliveryAddress.deliveryAddress = deliveryAddress,
 				registerDeliveryAddress.additionalInfo = additionalInfo,

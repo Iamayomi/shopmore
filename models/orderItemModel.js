@@ -21,13 +21,13 @@ module.exports = (sequelize) => {
 
         status: {
             type: DataTypes.STRING,
-            allowNull: false,
+            // allowNull: false,
             // ['pending', 'completed', 'failed']
         },
 
         paymentMethod: {
             type: DataTypes.STRING,
-            allowNull: false,
+            // allowNull: false,
             // defaultValue: ['credit_card', 'bank_transfer', 'btc']
         },
 
