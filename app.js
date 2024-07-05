@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
@@ -6,8 +7,8 @@ const cookiesParser = require("cookie-parser")
 const globalErrorHandler = require('./services/errorService.js');
 const userRoute = require('./routes/userRoute');
 const productRoute = require('./routes/productRoute');
+const checkoutRoute = require('./routes/checkoutRoute');
 const cartRoute = require('./routes/cartRoute');
-const orderItemRoute = require('./routes/orderItemsRoute');
 const deliveryAddressRoute = require('./routes/deliveryAddressRoute');
 const reviewRoute = require('./routes/reviewRoute');
 
@@ -16,6 +17,9 @@ const reviewRoute = require('./routes/reviewRoute');
 const AppError = require('./utils/appError');
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 if (process.env.NODE_ENVIRONMENT === 'development') {
     app.use(morgan('dev'));
@@ -35,11 +39,11 @@ app.use("/shopmore/users", userRoute);
 
 app.use("/shopmore/v1/products", productRoute);
 
+app.use("/shopmore/payment", checkoutRoute);
+
 app.use("/shopmore/reviews", reviewRoute);
 
 app.use("/shopmore/carts", cartRoute);
-
-app.use("/shopmore/order-items", orderItemRoute);
 
 app.use("/shopmore/delivery-address", deliveryAddressRoute);
 

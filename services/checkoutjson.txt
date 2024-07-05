@@ -1,0 +1,95 @@
+{
+    "status": "Success",
+    "checkout": {
+        "id": "cs_test_a18q9UlOPZ7YCOWxg6223saVjzfKQcrpcdRogjyTPw8kHkCw32KCxm8akm",
+        "object": "checkout.session",
+        "after_expiration": null,
+        "allow_promotion_codes": null,
+        "amount_subtotal": 8920,
+        "amount_total": 8920,
+        "automatic_tax": {
+            "enabled": false,
+            "liability": null,
+            "status": null
+        },
+        "billing_address_collection": null,
+        "cancel_url": "http://127.0.0.1:8080/shopmore/user/cancel.html",
+        "client_reference_id": "2",
+        "client_secret": null,
+        "consent": null,
+        "consent_collection": null,
+        "created": 1718886086,
+        "currency": "usd",
+        "currency_conversion": null,
+        "custom_fields": [],
+        "custom_text": {
+            "after_submit": null,
+            "shipping_address": null,
+            "submit": null,
+            "terms_of_service_acceptance": null
+        },
+        "customer": null,
+        "customer_creation": "if_required",
+        "customer_details": {
+            "address": null,
+            "email": "mecheal44@gmail.com",
+            "name": null,
+            "phone": null,
+            "tax_exempt": "none",
+            "tax_ids": null
+        },
+        "customer_email": "mecheal44@gmail.com",
+        "expires_at": 1718972486,
+        "invoice": null,
+        "invoice_creation": {
+            "enabled": false,
+            "invoice_data": {
+                "account_tax_ids": null,
+                "custom_fields": null,
+                "description": null,
+                "footer": null,
+                "issuer": null,
+                "metadata": {},
+                "rendering_options": null
+            }
+        },
+        "livemode": false,
+        "locale": null,
+        "metadata": {},
+        "mode": "payment",
+        "payment_intent": null,
+        "payment_link": null,
+        "payment_method_collection": "if_required",
+        "payment_method_configuration_details": null,
+        "payment_method_options": {
+            "card": {
+                "request_three_d_secure": "automatic"
+            }
+        },
+        "payment_method_types": [
+            "card"
+        ],
+        "payment_status": "unpaid",
+        "phone_number_collection": {
+            "enabled": false
+        },
+        "recovered_from": null,
+        "saved_payment_method_options": null,
+        "setup_intent": null,
+        "shipping_address_collection": null,
+        "shipping_cost": null,
+        "shipping_details": null,
+        "shipping_options": [],
+        "status": "open",
+        "submit_type": null,
+        "subscription": null,
+        "success_url": "http://127.0.0.1:8080/shopmore/success.html",
+        "total_details": {
+            "amount_discount": 0,
+            "amount_shipping": 0,
+            "amount_tax": 0
+        },
+        "ui_mode": "hosted",
+        "url": "https://checkout.stripe.com/c/pay/cs_test_a18q9UlOPZ7YCOWxg6223saVjzfKQcrpcdRogjyTPw8kHkCw32KCxm8akm#fidkdWxOYHwnPyd1blpxYHZxWjA0VVFHaWxHYEdwVU1jNEZNSTd2aGo2N3xDVzZob2pyc2wySkZWMmx3Nml1UU5pNGBzU3VsR1JvZl9JZm1RdW1CVTBMbGhSSmxSQ0wwMVJ8UX88c2h2Sz1SNTV3V313Mk5ydScpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl"
+    }
+}

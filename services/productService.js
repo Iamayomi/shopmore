@@ -23,6 +23,8 @@ exports.getProduct = async function (req, res, next) {
      }
 };
 
+
+
 exports.getAllProducts = async function (req, res, next) {
 
      try {

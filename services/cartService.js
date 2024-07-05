@@ -47,7 +47,7 @@ exports.addToCart = async function (req, res, next) {
 exports.getCart = async function (req, res, next) {
   try {
 
-      const cartitems = await CartItem.findAll({ where: { cartId: req.user.id }, include: Product})
+      const cartitems = await CartItem.findAll({ where: { cartId: req.user.id }, include: Product});
 
       const cart = await Cart.findOne({ where: { userId: req.user.id} });
 

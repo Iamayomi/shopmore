@@ -8,7 +8,6 @@ const Cart = require("./cartModel")(sequelize);
 const CartItem = require("./cartItemModel")(sequelize);
 const Payment = require("./paymentModel")(sequelize);
 const CardPayment = require("./cardPaymentModel")(sequelize);
-const Orderitem = require("./orderItemModel")(sequelize);
 const Order = require("./orderModel")(sequelize);
 const Category = require("./categoryModel")(sequelize);
 const subCategory = require("./subCategoryModel")(sequelize);
@@ -57,7 +56,7 @@ sequelize.sync({ alter: true }).then(() => {
 });
 
 module.exports = { User, Cart, Review, Product, Payment, Category,
-subCategory, DeliveryAddress, CardPayment, CartItem, Order, Orderitem };
+subCategory, DeliveryAddress, CardPayment, CartItem, Order};
 
 
 
