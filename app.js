@@ -1,8 +1,8 @@
-const path = require('path');
 const express = require('express');
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const cookiesParser = require("cookie-parser")
+const cookiesParser = require("cookie-parser");
 
 const globalErrorHandler = require('./services/errorService.js');
 const userRoute = require('./routes/userRoute');
@@ -12,14 +12,13 @@ const cartRoute = require('./routes/cartRoute');
 const deliveryAddressRoute = require('./routes/deliveryAddressRoute');
 const reviewRoute = require('./routes/reviewRoute');
 
-
-
 const AppError = require('./utils/appError');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.set('trust proxy', true);
 
+app.use(cors());
 
 if (process.env.NODE_ENVIRONMENT === 'development') {
     app.use(morgan('dev'));

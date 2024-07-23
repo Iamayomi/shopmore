@@ -8,35 +8,40 @@ module.exports = (sequelize) => {
 
 		firstName: {
 			type: DataTypes.STRING,
-			allowNull: false,
-			validate: {
-				notNull: {
-					msg: "firstname is required"
-				}
-			}
+			// allowNull: false,
+			// validate: {
+			// 	notNull: {
+			// 		msg: "firstname is required"
+			// 	}
+			// }
 		},
 
 		lastName: {
 			type: DataTypes.STRING,
-			allowNull: false,
-			validate: {
-				notNull: {
-					msg: "lastname is required"
-				}
-			}
+			// allowNull: false,
+			// validate: {
+			// 	notNull: {
+			// 		msg: "lastname is required"
+			// 	}
+			// }
 		},
 
 		phoneNumber: {
 			type: DataTypes.STRING,
-			allowNull: false,
-			validate: {
-				checkVal(val) {
-					if (!/^\+?[0-9]+(-?[0-9]+)*$/) {
-						throw new Error('Please provide a valid phone number');
-					}
-				}
-			},
-			unique: true
+			// allowNull: false,
+			// validate: {
+			// 	checkVal(val) {
+			// 		if (!/^\+?[0-9]+(-?[0-9]+)*$/) {
+			// 			throw new Error('Please provide a valid phone number');
+			// 		}
+			// 	}
+			// },
+			// unique: true
+		},
+
+
+		ip: {
+			type: DataTypes.STRING,
 		},
 
 		email: {
@@ -48,7 +53,7 @@ module.exports = (sequelize) => {
 
 		gender: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			// allowNull: false,
 		},
 
 		country: {
@@ -57,7 +62,7 @@ module.exports = (sequelize) => {
 
 		dateOfBirth: {
 			type: DataTypes.DATE,
-			allowNull: false,
+			// allowNull: false,
 		},
 
 		active: {
@@ -74,20 +79,20 @@ module.exports = (sequelize) => {
 		acceptedTerms: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
-			allowNull: false,
-			validate: {
-				checkVal(val) {
-					if (val !== true) {
-						throw new Error('you did not accept the Term&condition');
-					}
-				},
-			},
+			// allowNull: false,
+			// validate: {
+			// 	checkVal(val) {
+			// 		if (val !== true) {
+			// 			throw new Error('you did not accept the Term&condition');
+			// 		}
+			// 	},
+			// },
 
 		},
 
 		password: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			// allowNull: false,
 			validate: {
 				min: 8
 			}

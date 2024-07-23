@@ -9,16 +9,14 @@ const { createTokenCookies } = require("../utils/sendTokenCookies");
 
 
 exports.register = async function (req, res, next) {
+
+	// let getuserIp = await req.headers['x-forwarded-for'] || req.connectionRemote;
+	// getuserIp = getuserIp + " ";
+	// console.log(getuserIp)
+
 	try {
 		const createUser = await User.create({
-			firstName: req.body.firstName,
-			lastName: req.body.lastName,
 			email: req.body.email,
-			phoneNumber: req.body.phoneNumber,
-			acceptedTerms: req.body.acceptedTerms,
-			gender: req.body.gender,
-			country: req.body.country,
-			dateOfBirth: req.body.dateOfBirth,
 			password: req.body.password,
 			confirmPassword: req.body.confirmPassword
 		});

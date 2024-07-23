@@ -13,12 +13,17 @@ router.post('/signin', authService.login);
 router.use(authenticate.protectRoute);
 
 // router.get('/getAllUser', userService.getAllUser);
+router.patch('/addUserDetails', userService.addUserDetails);
+router.patch('/addAnotherUserDetails', userService.addAnotherUserDetails);
+
+
+
 router.post('/forgotPassword', authService.forgotPassword);
 router.patch('/resetPassword/:token', authService.resetPassword);
 
 router.patch('/changePassword', userService.changePassword);
 router.patch('/deleteMyAccount', userService.deleteMe);
-router.patch('/updateMyAccount', userService.updateMe);
+// router.patch('/updateMyAccount', userService.updateMe);
 
 
 module.exports = router;

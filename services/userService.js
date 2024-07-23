@@ -2,6 +2,72 @@ const { Cart, User, Product, CartItem } = require("../models/index");
 const appError = require("./../utils/appError");
 
 
+
+exports.addUserDetails = async function (req, res, next) {
+
+  try{
+    const { firstName, lastName, phoneNumber } = req.body;
+
+      if (!firstName || !lastName || !phoneNumber) {
+            return next(new appError("please enter firstName, lastName and phoneNumber", 400));
+      };
+
+      const user = await User.findByPk(req.user.id);
+
+      user.firstName = firstName;
+      user.lastName = lastName;
+      user.phoneNumber = phoneNumber;
+      await user.save();
+
+
+        res.status(201).json({
+          status: "success",
+          data: {
+            userDetails: user
+          } 
+        })
+
+      }catch(err){
+          return next(new appError(`${err.message}`, 400));
+      }
+
+};
+
+
+exports.addAnotherUserDetails = async function (req, res, next) {
+
+  try{
+    const { gender, acceptedTerms, dateOfBirth } = req.body;
+
+      const user = await User.findByPk(req.user.id);
+
+      if (acceptedTerms === false) {
+            return next(new appError("You did not Accept the Terms and condition", 400));
+      };
+
+
+      user.gender = gender;
+      user.acceptedTerms = acceptedTerms;
+      user.dateOfBirth = dateOfBirth;
+      await user.save();
+
+
+      res.status(201).json({
+        status: "success",
+        data: {
+          userDetails: user
+        } 
+      })
+
+      }catch(err){
+          return next(new appError(`${err.message}`, 400));
+      }
+
+};
+
+
+
+
 exports.changePassword = async function(req, res, next){
   try{
 
@@ -34,29 +100,29 @@ exports.changePassword = async function(req, res, next){
 };
 
 
-exports.updateMe = async function(req, res, next){
-   try {
+// exports.updateMe = async function(req, res, next){
+//    try {
       
-      const user = await req.user;
+//       const user = await req.user;
 
-      const { email, phoneNumber } = req.body;
+//       const { email, phoneNumber } = req.body;
 
-      user.email = email;
-      user.phoneNumber = phoneNumber;
-      await user.save();
+//       user.email = email;
+//       user.phoneNumber = phoneNumber;
+//       await user.save();
 
-       res.status(201).json({
-        status: "success",
-        data: {
-          updateMe: user
-        } 
-      })
+//        res.status(201).json({
+//         status: "success",
+//         data: {
+//           updateMe: user
+//         } 
+//       })
 
-   } catch(err){
-     return next(new appError(`${err.message}`, 400));
+//    } catch(err){
+//      return next(new appError(`${err.message}`, 400));
 
-   }
-}
+//    }
+// }
 
 
 exports.deleteMe = async function (req, res, next) {
