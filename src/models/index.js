@@ -1,14 +1,12 @@
 const sequelize = require("../config/db");
 
 const User = require("./userModel")(sequelize);
-const UserTemp = require("./userTempModel")(sequelize);
 const DeliveryAddress = require("./deliveryAddressModel")(sequelize);
 const Product = require("./productModel")(sequelize);
 const Review = require("./reviewModel")(sequelize);
 const Cart = require("./cartModel")(sequelize);
 const CartItem = require("./cartItemModel")(sequelize);
-const Payment = require("./paymentModel")(sequelize);
-const CardPayment = require("./cardPaymentModel")(sequelize);
+// const Payment = require("./paymentModel")(sequelize);
 const Order = require("./orderModel")(sequelize);
 const Category = require("./categoryModel")(sequelize);
 const subCategory = require("./subCategoryModel")(sequelize);
@@ -50,15 +48,15 @@ Product.belongsTo(subCategory);
 // Payment.hasOne(CardPayment);
 // CardPayment.belongsTo(Payment);
 
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync({ force: true }).then(() => {
     console.log("Models synchronized with the database <<<<<<<<<<<<<>>>>>>>>>")
 }).catch(err => {
     console.error("UNABLE to synchronize with the DATABASE", err)
 });
 
 module.exports = {
-    User, UserTemp, Cart, Review, Product, Payment, Category,
-    subCategory, DeliveryAddress, CardPayment, CartItem, Order
+    User, Cart, Review, Product, Category,
+    subCategory, DeliveryAddress, CartItem, Order
 };
 
 

@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-require('dotenv').config({ path: './config/config.env' });
+require('dotenv').config({ path: './src/config/config.env' });
 
 const sequelize = (process.env.NODE_ENVIRONMENT === 'production') ?  new Sequelize(process.env.PG_URL, { dialect: 'postgres' }) :  new Sequelize(process.env.PG_DATABASE, process.env.PG_USERNAME, process.env.PG_PASSWORD, { dialect: 'postgres' });
 
