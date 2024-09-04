@@ -48,7 +48,7 @@ Product.belongsTo(subCategory);
 // Payment.hasOne(CardPayment);
 // CardPayment.belongsTo(Payment);
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ alter: true }).then(() => {
     console.log("Models synchronized with the database <<<<<<<<<<<<<>>>>>>>>>")
 }).catch(err => {
     console.error("UNABLE to synchronize with the DATABASE", err)

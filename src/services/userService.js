@@ -5,19 +5,14 @@ const ErrorApp = require("./../utils/appError");
 exports.changeUserDetails = async function (req, res, next) {
 
   try {
-    const { firstName, lastName, phoneNumber } = req.body;
-
-    if (!firstName || !lastName || !phoneNumber) {
-      return next(new ErrorApp("please enter firstName, lastName and phoneNumber", 400));
-    };
+    const { username, email } = req.body;
 
     const user = await User.findByPk(req.user.id);
 
-    user.firstName = firstName;
-    user.lastName = lastName;
+    user.username = username;
+    user.email = email;
     user.phoneNumber = phoneNumber;
     await user.save();
-
 
     res.status(201).json({
       status: "success",

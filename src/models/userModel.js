@@ -24,7 +24,7 @@ module.exports = (sequelize) => {
 			unique: true
 		},
 
-		ip: {
+		ipAddress: {
 			type: DataTypes.STRING,
 		},
 
@@ -71,10 +71,12 @@ module.exports = (sequelize) => {
 
 		otp: {
 			type: DataTypes.STRING,
+			defaultValue: null,
 		},
 
 		otpExpiry: {
 			type: DataTypes.DATE,
+			defaultValue: null,
 		},
 
 		isEmailVerified: {
@@ -100,16 +102,6 @@ module.exports = (sequelize) => {
 			validate: {
 				min: 8
 			}
-		},
-
-		passwordResetToken: {
-			type: DataTypes.STRING,
-			defaultValue: null
-		},
-
-		passwordResetExpires: {
-			type: DataTypes.DATE,
-			defaultValue: null
 		},
 
 		userCreatedAt: {

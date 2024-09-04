@@ -10,6 +10,7 @@ const userRoute = require('./routes/userRoute');
 const productRoute = require('./routes/productRoute');
 const checkoutRoute = require('./routes/checkoutRoute');
 const cartRoute = require('./routes/cartRoute');
+const adminRoute = require('./routes/adminRoute');
 const deliveryAddressRoute = require('./routes/deliveryAddressRoute');
 const reviewRoute = require('./routes/reviewRoute');
 const authenticateRoute = require('./routes/authRoute');
@@ -39,11 +40,13 @@ app.use(xss());
 
 app.use("/api/v1/users", userRoute);
 
+app.use("/api/v1/admins", adminRoute);
+
 app.use("/api/v1/auth", authenticateRoute);
 
 app.use("/api/v1/products", productRoute);
 
-app.use("/api/v1/payment", checkoutRoute);
+app.use("/api/v1/checkout", checkoutRoute);
 
 app.use("/api/v1/reviews", reviewRoute);
 

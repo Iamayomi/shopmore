@@ -8,6 +8,10 @@ const { User } = require("../models/index");
 // calling express router
 const router = express.Router();
 
+
+// send otp to user
+// router.post("/send-opt/:userId", authenticationService.generateOneTimePassword);
+
 // sign up user route
 router.post('/register', authenticationService.register);
 
@@ -20,10 +24,6 @@ router.post("/:userId/verify-phone", authenticationService.verifyPhone);
 // authorization route
 router.use(authorizationMiddleware(User));
 
-// send otp to user
-router.post("/send-opt", authenticationService.generateOneTimePassword);
-
-
 // user verify email
 router.post("/:userId/verify-email", authenticationService.verifyEmail);
 
@@ -31,7 +31,7 @@ router.post("/:userId/verify-email", authenticationService.verifyEmail);
 router.post('/forgot-Password', authenticationService.forgotPassword);
 
 // user reset password route
-router.patch('/reset-Password/:token', authenticationService.resetPassword);
+router.patch('/reset-Password', authenticationService.resetPassword);
 
 // user logout
 router.patch('/logout', authenticationService.userLogout);

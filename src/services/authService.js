@@ -7,13 +7,15 @@ const { Sequelize } = require("sequelize");
 const axios = require("axios");
 
 
-const { User, UserTemp } = require("../models/index");
+const { User } = require("../models/index");
 const { createTokenCookies } = require("../utils/sendTokenCookies");
+const generateOtp = require("../utils/generateOtp");
 const ErrorApp = require("../utils/appError");
-
 
 const Email = require("../utils/email");
 
+
+// console.log(generateOtp())
 
 exports.register = async function (req, res, next) {
 
@@ -33,7 +35,6 @@ exports.register = async function (req, res, next) {
 			email, password, phoneNumber, acceptedTerms, username, gender, ip
 		});
 
-
 		createTokenCookies(createUser, 201, `User sign up successfully`, res);
 		
 
@@ -43,39 +44,13 @@ exports.register = async function (req, res, next) {
 };
 
 
-
-exports.generateOneTimePassword  = async (req, res, next) => {
-
-		// generate opt for user
-		const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-		// set expiry time for user
-		const otpExpiry = new Date(Date.now() + 15 * 60 * 1000);
-
-		const user = req.user;
-
-		// save opt and expiry time to user
-		user.otp = otp;
-		user.otpExpiry = otpExpiry;
-		await user.save();
-
-	// await new Email(user, null).welcomeMessage();
-
-
-		res.status(200).json({
-			status: "success",
-			message: `OTP is ${otp} it will expires in the next 15mins`,
-		})
-
-}
-
-
 exports.verifyPhone = async function (req, res, next) {
 	try {
 		const userId = req.params.userId;
 
-
 		const user = await User.findByPk(userId);
+
+		// console.log(user)
 
 		const { otp } = req.body;
 
@@ -109,7 +84,7 @@ exports.verifyPhone = async function (req, res, next) {
 exports.verifyEmail = async function (req, res, next) {
 	try {
 
-		const userId = req.user.id;
+		const userId = req.params.userId;
   
 		const user = await User.findByPk(userId);
 
@@ -153,15 +128,9 @@ exports.login = async function (req, res, next) {
 	};
 
 	const user = await User.findOne({ where: { email } });
-	// console.log(user.password)
-	// console.log(await bcrypt.compare(password, user.password))
 
 	if (!user || !(await bcrypt.compare(password, user.password))) {
 		return next(new ErrorApp("Invalid a email and password", 401));
-	};
-
-	if (user.isEmailVerified === false || user.isPhoneVerified === false) {
-		return next(new ErrorApp("please verify your email and number", 401));
 	};
 
 	createTokenCookies(user, 201, "Login Successfully", res);
@@ -182,7 +151,7 @@ exports.forgotPassword = async function (req, res, next) {
 		return next(new ErrorApp("This email doen't exist", 404));
 	};
 
-// generate opt for user
+   // generate opt for user
 	const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
 	// set expiry time for user
@@ -193,7 +162,7 @@ exports.forgotPassword = async function (req, res, next) {
 	user.otpExpiry = otpExpiry;
 	await user.save();
 
-// await new Email(user, null).welcomeMessage();
+   // await new Email(user, null).welcomeMessage();
 
 
 	res.status(200).json({
@@ -206,9 +175,7 @@ exports.forgotPassword = async function (req, res, next) {
 
 exports.resetPassword = async function (req, res, next) {
 
-	const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
-
-	const user = await User.findOne({ passwordResetToken: hashedToken, where: { passwordResetExpires: { [Op.gte]: Date.now() } } });
+	const user = await User.findOne({ where: { otp: otp, otpExpiry: { [Op.gte]: Date.now() } } });
 
 	if (!user) {
 		return next(new ErrorApp("Invalid token or has expired", 400));
@@ -216,8 +183,8 @@ exports.resetPassword = async function (req, res, next) {
 
 	user.password = req.body.password;
 	user.confirmPassword = req.body.confirmPassword;
-	user.passwordResetToken = null;
-	user.passwordResetExpires = null;
+	user.otp = null;
+	user.otpExpiry = null;
 
 	await user.save();
 
