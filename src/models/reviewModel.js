@@ -26,7 +26,7 @@ module.exports = (sequelize) => {
                 }
             }
         },
-
+        
         reviewDate: {
             type: DataTypes.DATE,
             defaultValue: Date.now()

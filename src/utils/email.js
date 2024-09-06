@@ -1,20 +1,24 @@
 const nodemailer = require("nodemailer");
 
 module.exports = class Email  {
-	   constructor(user, url) {
-		this.to = to;
-		this.email = user.email;
+	   constructor(user, html) {
+		this.from = `Shopmore <${process.env.EMAIL_FROM}>`;
+		this.to = user.email;
+		this.username = user.username;
 		this.otp = user.otp;
-		this.from = `Shopmore Shopping Site<${process.env.EMAIL_FROM}>`;
+		this.html = html;
 	};
 // olojedechristopher24@gmail.com
 
 	transporter(){
 		return nodemailer.createTransport({
-			service: 'gmail',
+			host: process.env.BREVO_SMPT_HOST,
+			port: 587,
+			secure: false,
+			// family: 6,
 			 auth: {
-				user: "",
-				password: "" 
+				user: process.env.BREVO_SMPT_USERNAME,
+				pass: process.env.BREVO_SMPT_PASSWORD 
 			}
 		})
 	};
@@ -24,10 +28,10 @@ module.exports = class Email  {
 	async sendEmail(subject){
 
 		const mailOption = {
-			from: this.form,
+			from: this.from,
 			to: this.to,
 			subject,
-			text: `please verify Your opt ${this.otp}`
+			html: this.html,
 		};
 
 		await this.transporter().sendMail(mailOption, (err, info) => {
@@ -44,12 +48,12 @@ module.exports = class Email  {
 	};
 
 	async verifyEmail(){
-		await this.send('Your Email otp will Expires in 15 mins');
+		await this.sendEmail(`Your security code is ${this.otp}`);
 	};
 
 
 	async sendPasswordReset(){
-		await this.send('Your password reset token will Expires in 10mins');
+		await this.sendEmail('Your password reset token will Expires in 10mins');
 	};
 
 };

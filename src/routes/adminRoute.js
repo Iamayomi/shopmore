@@ -16,7 +16,6 @@ router.get('/:productId/get-product', adminstratorService.getProduct);
 
 router.get('/:productId/delete-product', adminstratorService.getProduct);
 
-
 router.get('/getAllUser', adminstratorService.getAllUser);
 
 module.exports = router;

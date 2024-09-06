@@ -18,14 +18,18 @@ router.post('/register', authenticationService.register);
 // sign in user route
 router.post('/signin', authenticationService.login);
 
+// send otp user phone number route
+router.post("/:userId/send-otp-phonenumber", authenticationService.sendOTPPhonenumber);
+
 // user verify phone number route
 router.post("/:userId/verify-phone", authenticationService.verifyPhone);
+
+// user verify email
+router.post("/:userId/verify-email", authenticationService.verifyEmail);
 
 // authorization route
 router.use(authorizationMiddleware(User));
 
-// user verify email
-router.post("/:userId/verify-email", authenticationService.verifyEmail);
 
 // user forget password route
 router.post('/forgot-Password', authenticationService.forgotPassword);
