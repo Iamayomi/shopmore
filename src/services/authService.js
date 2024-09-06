@@ -159,10 +159,9 @@ exports.verifyEmail = async function (req, res, next) {
 		if (new Date() > user.otpExpiry) {
 			return next(new ErrorApp("OTP has expired", 400));
 		};
-
+		
 		// check if otp and user id send is true and update if is true
-		User.update({ otp: null, otpExpiry: null, isEmailVerified: true },
-		 { where: { id: userId, otp: otp }}).then((data) => {
+		User.update({ otp: null, otpExpiry: null, isEmailVerified: true }, { where: { id: userId, otp: otp }}).then((data) => {
 		res.status(201).json({
 					status: "success",
 					message: "Email verification is successful",
