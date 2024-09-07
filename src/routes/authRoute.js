@@ -1,4 +1,4 @@
-// authentication routes
+////////////////// AUTHENTICATION ROUTES ////////////////////////////////////
 
 const express = require('express'); // import express
 const authenticationService = require('../services/authService'); // importing authenticationService
@@ -8,9 +8,6 @@ const { User } = require("../models/index");
 // calling express router
 const router = express.Router();
 
-
-// send otp to user
-// router.post("/send-opt/:userId", authenticationService.generateOneTimePassword);
 
 // sign up user route
 router.post('/register', authenticationService.register);

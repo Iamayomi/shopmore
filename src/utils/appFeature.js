@@ -106,7 +106,7 @@ module.exports = class AppFeatures {
 
    async searchProducts() {
 
-    let searchQuery = `SELECT p.*, s.id AS subcategoryId, s."subCategoryName" AS subcategoryName, c.id AS categoryId, c."categoryName" AS categoryName FROM products p JOIN subcategories s ON p."subcategoryId" = s.id JOIN categories c ON s."categoryId" = c.id `;
+    let searchQuery = `SELECT p.*, s.id AS subcategoryId, s."subcategoryName" AS subcategoryName, c.id AS categoryId, c."categoryName" AS categoryName FROM products p JOIN subcategories s ON p."subcategoryId" = s.id JOIN categories c ON s."categoryId" = c.id `;
     
     searchQuery = (this.queryLimit.length > 0) ? searchQuery = searchQuery.replace('p.*', this.queryLimit) : searchQuery += '';
   

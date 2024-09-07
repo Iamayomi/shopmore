@@ -1,14 +1,25 @@
+////////////////// CART ROUTES ////////////////////////////////////
+
+
 const express = require("express");
 const router = express.Router({ mergeParams: true });
+
 const cartService = require('../services/cartService');
-// const authenticate = require('../middleware/authMiddleware');
+const { User } = require("../models/index");
+const authorizationMiddleware = require('../middleware/authMiddleware'); // importing authMiddleware
 
 
-// router.use(authenticate.protectRoute);
+// authorization route
+router.use(authorizationMiddleware(User));
+
+// add product to cart routes
 router.post('/:productId/add-to-cart', cartService.addToCart);
-router.get('/get-user-cart', cartService.getCart);
-router.delete('/delete-user-cart', cartService.delACart);
 
+// get a user cart route 
+router.get('/get-user-cart', cartService.getCart);
+
+// user delete cart route
+router.delete('/reomve-user-cart', cartService.delACart);
 
 
 module.exports = router;

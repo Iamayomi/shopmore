@@ -32,7 +32,7 @@ exports.getAllProducts = async function (req, res, next) {
 
           let products = await appProperties.searchProducts();
 
-           if (!products.products) {
+           if (products.length < 0) {
                return next(new appError("Empty products", 400));
           };
 

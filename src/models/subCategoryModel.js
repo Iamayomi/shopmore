@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
    //      	defaultValue: () => generateRandomId()
    //      },
 
-        subCategoryName:  {
+        subcategoryName:  {
            type: DataTypes.STRING,
            unique: true
         }

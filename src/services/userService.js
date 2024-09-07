@@ -2,10 +2,11 @@ const { Cart, User, Product, CartItem } = require("../models/index");
 const ErrorApp = require("./../utils/appError");
 
 
+// user add profile
 exports.changeUserDetails = async function (req, res, next) {
 
   try {
-    const { username, email } = req.body;
+    const { username, email, phoneNumber } = req.body;
 
     const user = await User.findByPk(req.user.id);
 
@@ -28,6 +29,7 @@ exports.changeUserDetails = async function (req, res, next) {
 };
 
 
+// user change password
 exports.changePassword = async function (req, res, next) {
   try {
 
@@ -59,30 +61,6 @@ exports.changePassword = async function (req, res, next) {
   }
 };
 
-
-// exports.updateMe = async function(req, res, next){
-//    try {
-
-//       const user = await req.user;
-
-//       const { email, phoneNumber } = req.body;
-
-//       user.email = email;
-//       user.phoneNumber = phoneNumber;
-//       await user.save();
-
-//        res.status(201).json({
-//         status: "success",
-//         data: {
-//           updateMe: user
-//         } 
-//       })
-
-//    } catch(err){
-//      return next(new ErrorApp(`${err.message}`, 400));
-
-//    }
-// }
 
 
 exports.deleteMe = async function (req, res, next) {

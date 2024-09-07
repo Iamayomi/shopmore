@@ -12,8 +12,6 @@ module.exports = (Model) => {
             token = req.headers.authorization.split(" ")[1];
         };
 
-        console.log(token);
-
         if (!token) {
             return next(new appError("You are not logged in! Please login to get accsss", 401));
         };

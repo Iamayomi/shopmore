@@ -1,20 +1,25 @@
+////////////////// USER ROUTES ////////////////////////////////////
+
 const express = require('express');
-const userService = require('../services/userService');
-// const authorizationMiddleware = require('../middleware/authMiddleware'); // importing authMiddleware
-// const { User, UserTemp } = require("../models/index");
-
-
-
 const router = express.Router();
 
-// router.use(authService.getAllActiveUsers);
-// router.use(authorizationMiddleware.protectRoute(UserTemp));
 
-// router.patch('/addUserDetails', userService.changeUserDetails);
+const userService = require('../services/userService');
+const authorizationMiddleware = require('../middleware/authMiddleware'); // importing authMiddleware
+const { User } = require("../models/index");
 
-router.patch('/change-Password', userService.changePassword);
+
+// authorization route
+router.use(authorizationMiddleware(User));
+
+// update user profile route
+router.patch('/update-Myprofile', userService.changeUserDetails);
+
+// change user password route
+router.post('/change-Password', userService.changePassword);
+
+// delete user account
 router.patch('/delete-MyAccount', userService.deleteMe);
-// router.patch('/updateMyAccount', userService.updateMe);
 
 
 module.exports = router;

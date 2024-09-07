@@ -7,10 +7,8 @@ const { Sequelize } = require("sequelize");
 const axios = require("axios");
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 
-
 const { User } = require("../models/index");
 const { createTokenCookies } = require("../utils/sendTokenCookies");
-// const generateOtp = require("../utils/generateOtp");
 const ErrorApp = require("../utils/appError");
 
 const Email = require("../utils/email");

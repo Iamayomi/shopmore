@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const rateLimit =require("express-rate-limit");
 const cookiesParser = require("cookie-parser");
 const xss = require("xss-clean");
 
@@ -19,7 +20,7 @@ const AppError = require('./utils/appError');
 
 const app = express();
 
-app.set('trust proxy', true);
+app.set('trust proxy', 1);
 
 app.use(cors());
 
@@ -27,6 +28,11 @@ if (process.env.NODE_ENVIRONMENT === 'development') {
     app.use(morgan('dev'));
 };
 
+app.use(rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: "Many request from this Ip, please try after 15 minutes"
+}))
 
 app.use(cookiesParser());
 
@@ -54,7 +60,7 @@ app.use("/api/v1/carts", cartRoute);
 
 app.use("/api/v1/delivery-address", deliveryAddressRoute);
 
-
+// get all invalid routes
 app.all("*", (req, res, next) => {
     next(new AppError(`can't find ${req.originalUrl} no the server`, 404));
 });
