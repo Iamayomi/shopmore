@@ -51,9 +51,12 @@ module.exports = class Email  {
 		await this.sendEmail(`Your security code is ${this.otp}`);
 	};
 
-
 	async sendPasswordReset(){
-		await this.sendEmail('Your password reset token will Expires in 10mins');
+		await this.sendEmail(`Your security code ${this.otp} password reset`);
+	};
+
+	async detectIpAddress(){
+		await this.sendEmail('Your account is login on difference device');
 	};
 
 };

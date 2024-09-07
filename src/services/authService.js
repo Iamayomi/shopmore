@@ -20,13 +20,18 @@ exports.register = async function (req, res, next) {
 
 	try {
 
-		let ipAddress = await req.headers['x-forwarded-for'] || req.ip;
+		// user public address
+		const ipAddress = await axios.get(`https://api.ipify.org?format=json`);
+
+		const { ip } = ipAddress.data;
 
 		const { username, email, password, phoneNumber, gender, acceptedTerms } = req.body;
 
 		// find the user with the email if the user eist with the email
 		const user = await User.findOne({ where: { email } });
 
+		const userIsEmailVerified = await User.findOne({ where: { email: email, isEmailVerified: false } });
+	
 		// generate opt for user
 		const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -34,7 +39,7 @@ exports.register = async function (req, res, next) {
 		const otpExpiry = new Date(Date.now() + 15 * 60 * 1000);
 
 		// html template for sending sign up code
-		const html = `<h2> Your shopmore email security code </h2>
+		const html = `<h2> Verify your email address</h2>
 		<p>Never share your code with anyone shopmore employee will never ask for it</p>
 		<p>it will expire in 15mins</p>
 		<h2>${otp}</h2>
@@ -42,28 +47,36 @@ exports.register = async function (req, res, next) {
 		<p>Shopmore support </p>`;
 
 		// check if user has sign up with this email before, if so, sent code to the email
-		// if(user.isEmailVerified === false){
+		
+		// create user if email doest not exist in database
+		if (userIsEmailVerified) {
 
-		// 	// sent code to the user
-		// 	await new Email(user, html).verifyEmail();
+		await User.update({ otp: otp, otpExpiry: otpExpiry},{ where: { email: email, isEmailVerified: false }});
+		
+		  new Email(user, html).verifyEmail();
 
-		// 	res.status(201).json({
-		// 		status: "success",
-		// 		message: `code has been sent to this email ${user.email}`,
-		// 	})
+			res.status(201).json({
+				status: "success",
+				message: `code has been sent to this email ${user.email}`,
+			})
 
-		// // create user if email doest not exist in database
-		// }; 
+
+		}
+		else if(!user){
 		// create user on the temporary model 
 		const createUser = await User.create({
 			email, password, phoneNumber, acceptedTerms, username, gender, ipAddress, otp, otpExpiry
 		});
 
+		// sign token and send user response
+		createTokenCookies(createUser, 201, `User sign up successfully`, res);	
+
 		// send OTP to user Email
 		await new Email(createUser, html).verifyEmail();
-
-		// sign token and send user response
-		createTokenCookies(createUser, 201, `User sign up successfully`, res);
+	
+		} else {
+			return next(new ErrorApp("Email has alreadly exist", 400));
+		}
 
 
 	} catch (err) { 
@@ -154,7 +167,6 @@ exports.verifyEmail = async function (req, res, next) {
 
 		const { otp } = req.body;
 
-
 		// check if otp has expired
 		if (new Date() > user.otpExpiry) {
 			return next(new ErrorApp("OTP has expired", 400));
@@ -185,16 +197,64 @@ exports.login = async function (req, res, next) {
 		return next(new ErrorApp("provide a email and password", 400));
 	};
 
+	let html;
+
 	const user = await User.findOne({ where: { email } });
 	// console.log(await bcrypt.compare(password, user.password))
+	const userIsEmailVerified = await User.findOne({ where: { email: email, isEmailVerified: false } });
 
-	// if (!user || !(await bcrypt.compare(password, user.password))) {
-	// 	return next(new ErrorApp("Invalid a email and password", 401));
-	// };
 
-	// createTokenCookies(user, 201, "Login Successfully", res);
+	if (userIsEmailVerified) {
+		// generate opt for user
+		const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-	// await new Email(user, null).welcomeMessage();
+		html = `<h2> Your shopmore email security code </h2>
+		<p>Never share your code with anyone shopmore employee will never ask for it</p>
+		<p>it will expire in 15mins</p>
+		<h2>${otp}</h2>
+		<p>Best regards</p>
+		<p>Shopmore support </p>`;
+
+		await new Email(user, html).verifyEmail();
+
+		res.status(201).json({
+			status: "success",
+			message: `code has been sent to this email ${user.email}`,
+		})
+	
+	}
+
+	else if (!user || !(await bcrypt.compare(password, user.password))) {
+		return next(new ErrorApp("Invalid a email and password", 401));
+	} else{
+
+		// check if user login on the same device if not send email to the user
+		if (!(user.ipAddress === req.ip)) {
+			const ipAddress = await axios.get(`https://api.ipify.org?format=json`);
+
+			const { ip } = ipAddress.data;
+
+			const getLocation = await axios.get(`http://api.ipstack.com/${ip}?access_key=${process.env.IPSTACK_API_KEY}`);
+
+
+      		const { country_name, region_name, longitude, latitude, city } = getLocation.data;
+
+			html = `<h2>Your account was sign in on difference device </h2>
+			<p>Account: ${user.email}</p>
+			<p>Location: ${country_name}, ${region_name} ${city}</p>
+			<p>Time: ${new Date()}</p>
+			<p>Latitude: ${latitude}</p>
+			<p>Longitude: ${longitude}</p>
+			<p>Ip Address: ${ip}</p>
+			<p>Best regards</p>
+			<p>Shopmore support </p>`;
+
+			await new Email(user, html).detectIpAddress();		
+		};
+
+		createTokenCookies(user, 201, "Login Successfully", res);
+
+	}
 
 };
 
@@ -204,7 +264,7 @@ exports.forgotPassword = async function (req, res, next) {
 
 	const email = req.body.email;
 
-	const user = await User.findOne({ where: { email: email } });
+	const user = await User.findOne({ where: { email } });
 
 	if (!user) {
 		return next(new ErrorApp("This email doen't exist", 404));
@@ -221,23 +281,48 @@ exports.forgotPassword = async function (req, res, next) {
 	user.otpExpiry = otpExpiry;
 	await user.save();
 
-   // await new Email(user, null).welcomeMessage();
+	// html template for sending sign up code
+	const html = `<h2>Verify your security code password reset</h2>
+		<p>Never share your code with anyone shopmore employee will never ask for it</p>
+		<p>it will expire in 15mins</p>
+		<h2>${user.otp}</h2>
+		<p>Best regards</p>
+		<p>Shopmore support </p>`;
 
+	// send security code to the use
+    await new Email(user, html).sendPasswordReset();
 
-	res.status(200).json({
+	res.status(201).json({
 		status: "success",
-		message: `OTP is ${otp} it will expires in the next 15mins`,
+		message: `security code has been sent to this email ${user.email}`,
 	})
 
 };
 
+exports.verifyResetPasswordCode = async function (req, res, next) {
+	const { email, otp } = req.body;
 
-exports.resetPassword = async function (req, res, next) {
-
-	const user = await User.findOne({ where: { otp: otp, otpExpiry: { [Op.gte]: Date.now() } } });
+	const user = await User.findOne({ where: { email: email, otp: otp, otpExpiry: { [Op.gte]: Date.now() } } });
 
 	if (!user) {
-		return next(new ErrorApp("Invalid token or has expired", 400));
+		return next(new ErrorApp("Security Code has expired or invalid email", 400));
+	};
+	await user.save();
+
+	res.status(201).json({
+		status: "success",
+		message: "password reset code verification is successful",
+	})
+
+};
+
+exports.resetPassword = async function (req, res, next) {
+	const email = req.body.email;
+
+	const user = await User.findOne({ where: { email } });
+
+	if (!user) {
+		return next(new ErrorApp("email does not exist", 400));
 	};
 
 	user.password = req.body.password;
@@ -247,7 +332,7 @@ exports.resetPassword = async function (req, res, next) {
 
 	await user.save();
 
-	createTokenCookies(user, 200, res);
+	createTokenCookies(user, 200, "password successfully reset", res);
 
 };
 

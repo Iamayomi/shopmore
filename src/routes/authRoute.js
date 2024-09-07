@@ -27,15 +27,17 @@ router.post("/:userId/verify-phone", authenticationService.verifyPhone);
 // user verify email
 router.post("/:userId/verify-email", authenticationService.verifyEmail);
 
-// authorization route
-router.use(authorizationMiddleware(User));
-
-
 // user forget password route
-router.post('/forgot-Password', authenticationService.forgotPassword);
+router.post('/forgot-password', authenticationService.forgotPassword);
+
+// user routes for verify security code for password reset
+router.post('/verify-password-reset-code', authenticationService.verifyResetPasswordCode);
 
 // user reset password route
-router.patch('/reset-Password', authenticationService.resetPassword);
+router.patch('/reset-password', authenticationService.resetPassword);
+
+// authorization route
+router.use(authorizationMiddleware(User));
 
 // user logout
 router.patch('/logout', authenticationService.userLogout);
