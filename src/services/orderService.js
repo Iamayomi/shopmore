@@ -1,5 +1,5 @@
 const { Product, Orderitem, Payment } = require("../models/index");
-const AppError = require("./../utils/AppError");
+const AppError = require("./../utils/appError");
 
 exports.addToOderItems = async function (req, res, next) {
   const product = await Product.findByPk(req.params.productId * 1);

@@ -35,8 +35,8 @@ Review.belongsTo(Product);
 User.hasOne(Cart, { foreignKey: "userId" });
 Cart.belongsTo(User, { foreignKey: "userId" });
 
-Order.hasMany(Store);
-Store.belongsTo(Order);
+Store.hasMany(Order);
+Order.belongsTo(Store);
 
 User.hasMany(Order);
 Order.belongsTo(User);

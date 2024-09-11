@@ -73,3 +73,28 @@ exports.deleteMe = async function (req, res, next) {
     next(new ErrorApp(`${err.message}`, 400));
   }
 };
+
+exports.getUser = async function (req, res, next) {
+  try {
+    const getUser = await User.findOne({
+      where: { id: req.params.userId },
+      attributes: [
+        "id",
+        "username",
+        "email",
+        "phoneNumber",
+        "gender",
+        "country",
+      ],
+    });
+
+    res.status(201).json({
+      status: "success",
+      data: {
+        getUser,
+      },
+    });
+  } catch (err) {
+    next(new ErrorApp(`${err.message}`, 400));
+  }
+};
