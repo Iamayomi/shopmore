@@ -1,19 +1,19 @@
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
-const { Product, Cart, CartItem } = require("../models/index");
+const { Product, Order, Cart, CartItem } = require("../models/index");
 const AppError = require("../utils/appError");
 
 exports.checkoutSession = async function (req, res, next) {
   try {
-    const product = await Product.findByPk(req.params.productId * 1);
+    const product = await Product.findByPk(req.params.productId);
 
-    const productdetails = await stripe.products.create({
+    const productDetails = await stripe.products.create({
       name: product.name,
       description: `payment for ${product.name}`,
       image: product.image,
     });
 
     const productPrice = await stripe.prices.create({
-      product: productdetails.id,
+      product: productDetails.id,
       unit_amount: product.price * 100,
       currency: "usd",
     });
@@ -68,20 +68,33 @@ exports.checkoutSession = async function (req, res, next) {
   }
 };
 
-exports.webhookCheckout = (req, res, next) => {
+exports.webhookCheckout = async (req, res, next) => {
   const signature = req.headers["stripe-signature"];
 
   let event;
-  try {
-    event = stripe.webhooks.constructEvent(req.body, signature);
-  } catch (err) {
-    return next(res.status(400).send(`webhook error: ${err.message}`));
-  }
+  // try {
+  event = stripe.webhooks.constructEvent(
+    req.body,
+    signature,
+    process.env.STRIPE_WEBHOOK_SECRET
+  );
+  console.log(event);
+  // } catch (err) {
+  //   return next(res.status(400).send(`webhook error: ${err}`));
+  // }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
-    console.log(session);
-  }
+  // if (event.type === "checkout.session.completed") {
+  //   const session = event.data.object;
+
+  //   // const newOrder = await Order.create({
+  //   //   userId: session.metadata.userId,
+  //   //   price: session.unit_amount,
+  //   //   isPaid: true,
+
+  //   // });
+
+  //   console.log(session);
+  // }
 
   res.status(200).json({ received: true });
 };

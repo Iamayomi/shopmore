@@ -81,6 +81,10 @@ exports.getUser = async function (req, res, next) {
       where: { id: req.params.userId },
     });
 
+    if (!getUser) {
+      return next(new ErrorApp(`this user account is not found`, 400));
+    }
+
     res.status(201).json({
       status: "success",
       data: {

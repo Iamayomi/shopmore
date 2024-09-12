@@ -6,7 +6,7 @@ exports.changeUserDetails = async function (req, res, next) {
   try {
     const { username, email, phoneNumber } = req.body;
 
-    const user = await User.findByPk(req.user.id);
+    const user = await User.findByPk(req.params.userId);
 
     user.username = username;
     user.email = email;
@@ -27,7 +27,11 @@ exports.changeUserDetails = async function (req, res, next) {
 // user change password
 exports.changePassword = async function (req, res, next) {
   try {
-    const user = await User.findByPk(req.user.id);
+    const user = await User.findByPk(req.params.userId);
+
+    if (!user) {
+      return next(new ErrorApp(`User with this id doesn't`, 400));
+    }
 
     const { newPassword, confirmNewPassword } = req.body;
 
@@ -60,9 +64,13 @@ exports.changePassword = async function (req, res, next) {
 
 exports.deleteMe = async function (req, res, next) {
   try {
-    let user = await req.user;
+    const user = await User.findByPk(req.params.userId);
 
     const { deleteAccount } = req.body;
+
+    if (!user) {
+      return next(new ErrorApp(`User with this id doesn't`, 400));
+    }
 
     if (!deleteAccount) {
       return next(new ErrorApp(`choose True to deactivate your account`, 400));

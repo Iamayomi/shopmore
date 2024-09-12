@@ -1,4 +1,4 @@
-const { subCategory } = require("../../models/index");
+const { subCategory, Product } = require("../../models/index");
 const ErrorApp = require("../../utils/appError");
 
 // admin create new subcategory
@@ -25,7 +25,7 @@ exports.createSubCategory = async function (req, res, next) {
 // admin create get all subcategory
 exports.getAllSubCategories = async function (req, res, next) {
   try {
-    const getSubCategories = await subCategory.findAll();
+    const getSubCategories = await subCategory.findAll({ include: Product });
 
     res.status(201).json({
       status: "SUCCESS",
@@ -51,5 +51,28 @@ exports.deleteSubCategories = async function (req, res, next) {
     });
   } catch (err) {
     return next(new appError(`${err.message}`, 400));
+  }
+};
+
+// admin edit a store
+exports.editSubcategory = async function (req, res, next) {
+  try {
+    const updateSubcategory = await subCategory.update(req.body, {
+      where: { id: req.params.subcategoryId },
+      returning: true,
+    });
+
+    if (!updateSubcategory) {
+      return next(new ErrorApp(`this subcategory id is not found`, 400));
+    }
+
+    res.status(201).json({
+      status: "SUCCESS",
+      data: {
+        updateSubcategory,
+      },
+    });
+  } catch (err) {
+    next(new ErrorApp(`${err.message}`, 400));
   }
 };

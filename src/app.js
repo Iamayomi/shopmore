@@ -12,9 +12,10 @@ const productRoute = require("./routes/productRoute");
 const checkoutRoute = require("./routes/checkoutRoute");
 const cartRoute = require("./routes/cartRoute");
 const adminRoute = require("./routes/adminRoute");
-const deliveryAddressRoute = require("./routes/storeAddressRoute");
+const deliveryAddressRoute = require("./routes/storeRoute.js");
 const reviewRoute = require("./routes/reviewRoute");
 const authenticateRoute = require("./routes/authRoute");
+const storeRoute = require("./routes/storeRoute");
 
 const AppError = require("./utils/appError");
 
@@ -54,11 +55,13 @@ app.use("/api/v1/auth", authenticateRoute);
 
 app.use("/api/v1/products", productRoute);
 
-app.use("/api/v1/checkout", checkoutRoute);
+app.use("/api/v1/checkouts", checkoutRoute);
 
 app.use("/api/v1/reviews", reviewRoute);
 
 app.use("/api/v1/carts", cartRoute);
+
+app.use("/api/v1/stores", storeRoute);
 
 app.use("/api/v1/delivery-address", deliveryAddressRoute);
 

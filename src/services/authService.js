@@ -1,9 +1,6 @@
-const { promisify } = require("util");
-const crypto = require("crypto");
 const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
-const { Sequelize } = require("sequelize");
 const axios = require("axios");
 const SibApiV3Sdk = require("sib-api-v3-sdk");
 

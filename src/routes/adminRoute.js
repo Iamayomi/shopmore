@@ -44,8 +44,11 @@ router.delete("/:productId/remove-product", adminstratorProduct.deleteProduct);
 // admin delete product route
 router.patch("/:productId/update-product", adminstratorProduct.updateProduct);
 
-// admin delete product route
-router.patch("/:productId/update-product", adminstratorProduct.updateProduct);
+// admin get all product route
+router.get("/get-products", adminstratorProduct.getProducts);
+
+// // admin get soldout product route
+// router.get("/get-products", adminstratorProduct.getProducts);
 
 //////////////// ADMIN PRODUCT CATEGORIES ROUTES ///////////////////////
 
@@ -53,7 +56,10 @@ router.patch("/:productId/update-product", adminstratorProduct.updateProduct);
 router.post("/create-category", adminstratorCategory.createCategory);
 
 // admin get all category route
-router.get("/get-all-category", adminstratorCategory.getAllCategories);
+router.get("/gets-categories", adminstratorCategory.getAllCategories);
+
+// admin edit category route
+router.post("/:categoryId/edit-category", adminstratorCategory.createCategory);
 
 // admin delete all category route
 router.delete(
@@ -67,7 +73,13 @@ router.delete(
 router.post("/create-subcategory", adminstratorSubCategory.createSubCategory);
 
 // admin get all subcategory route
-router.get("/get-all-subcategory", adminstratorSubCategory.getAllSubCategories);
+router.get("/gets-subcategories", adminstratorSubCategory.getAllSubCategories);
+
+// admin edit subcategory route
+router.post(
+  "/:subcategoryId/edit-subcategory",
+  adminstratorSubCategory.editSubcategory
+);
 
 // admin delete a subcategory route
 router.delete(
@@ -90,5 +102,17 @@ router.delete(
 
 // admin create store route
 router.post("/add-new-store", adminstratorStore.createStore);
+
+// admin get store route
+router.get("/:storeId/get-store", adminstratorStore.getStore);
+
+// admin edit store route
+router.patch("/:storeId/edit-store", adminstratorStore.editStore);
+
+// admin get all store route
+router.get("/get-stores", adminstratorStore.getStores);
+
+// admin get delete store route
+router.delete("/:storeId/delete-stores", adminstratorStore.delStore);
 
 module.exports = router;

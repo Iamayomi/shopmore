@@ -50,3 +50,26 @@ exports.deleteCategories = async function (req, res, next) {
     return next(new appError(`${err.message}`, 400));
   }
 };
+
+// admin category a store
+exports.editCategory = async function (req, res, next) {
+  try {
+    const updateCategory = await Store.update(req.body, {
+      where: { id: req.params.categoryId },
+      returning: true,
+    });
+
+    if (!updateCategory) {
+      return next(new ErrorApp(`this Category id is not found`, 400));
+    }
+
+    res.status(201).json({
+      status: "SUCCESS",
+      data: {
+        updateCategory,
+      },
+    });
+  } catch (err) {
+    next(new ErrorApp(`${err.message}`, 400));
+  }
+};

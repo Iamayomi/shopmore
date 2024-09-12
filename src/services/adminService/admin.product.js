@@ -55,6 +55,22 @@ exports.getProduct = async function (req, res, next) {
   }
 };
 
+// admin get a product
+exports.getProducts = async function (req, res, next) {
+  try {
+    const products = await Product.findAll();
+
+    res.status(200).json({
+      status: "SUCCESS",
+      data: {
+        products,
+      },
+    });
+  } catch (err) {
+    next(new ErrorApp(`${err.message}`, 400));
+  }
+};
+
 // admin delete a product
 exports.deleteProduct = async function (req, res, next) {
   try {

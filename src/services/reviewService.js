@@ -3,13 +3,11 @@ const ErrorApp = require("./../utils/appError");
 
 exports.addProductReview = async function (req, res, next) {
   try {
-    const userId = req.user.id;
-
     const addReview = await Review.create({
       review: req.body.review,
       rating: req.body.rating,
       productId: req.params.productId,
-      userId: userId,
+      userId: req.params.userId,
     });
 
     res.status(201).json({

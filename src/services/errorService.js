@@ -1,3 +1,4 @@
+const circularJSON = require("circular-json");
 // donst errorProduction =  function (err, res){
 // 	res.status(err.statusCode).json({
 // 		status: err.status,

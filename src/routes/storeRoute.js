@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 
-const storeAddress = require("../services/storeAddressService");
+const storeAddress = require("../services/storeService");
 const { User } = require("../models/index");
 const authorizationMiddleware = require("../middleware/authMiddleware"); // importing authMiddleware
 
@@ -11,6 +11,6 @@ const authorizationMiddleware = require("../middleware/authMiddleware"); // impo
 router.use(authorizationMiddleware(User));
 
 // user get delivery address route
-router.get("/get-delivery-address", storeAddress.getStoreAddress);
+router.get("/nearest-store", storeAddress.getNearestStore);
 
 module.exports = router;

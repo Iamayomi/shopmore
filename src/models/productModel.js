@@ -1,56 +1,54 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 
-
-
 module.exports = (sequelize) => {
+  const Product = sequelize.define(
+    "product",
+    {
+      // productId: {
+      //     type: DataTypes.INTEGER,
+      //     allowNull: false,
+      //     primaryKey: true,
+      //     defaultValue: () => generateRandomId()
+      // },
 
-    const Product = sequelize.define("product", {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
 
-        // productId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     primaryKey: true,
-        //     defaultValue: () => generateRandomId()
-        // },
+      price: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
 
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+      description: {
+        type: DataTypes.STRING(800),
+        allowNull: false,
+      },
 
-        price: {
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
+      currency: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
 
-        description: {
-            type: DataTypes.STRING(800),
-            allowNull: false
-        },
+      imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
 
-        currency: {
-             type: DataTypes.STRING,
-             allowNull: false
-        },
-              
-        imageUrl: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+      quantity: {
+        type: DataTypes.INTEGER,
+      },
 
-        quantity: {
-            type: DataTypes.INTEGER,
-        },
-
-        productAddedAt: {
-            type: DataTypes.DATE,
-            defaultValue: Date.now()
-        },
-
-    },{
-        timestamps: false,
-    });
-    return Product;
+      productAddedAt: {
+        type: DataTypes.DATE,
+        defaultValue: Date.now(),
+      },
+    },
+    {
+      timestamps: false,
+    }
+  );
+  return Product;
 };
-

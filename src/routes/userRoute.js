@@ -11,15 +11,15 @@ const { User } = require("../models/index");
 router.use(authorizationMiddleware(User));
 
 // update user profile route
-router.patch("/update-Myprofile", userService.changeUserDetails);
+router.patch("/:userId/update-Myprofile", userService.changeUserDetails);
 
 // update user profile route
 router.get("/:userId/getUser-profile", userService.getUser);
 
 // change user password route
-router.post("/change-Password", userService.changePassword);
+router.post("/:userId/change-Password", userService.changePassword);
 
 // delete user account
-router.patch("/delete-MyAccount", userService.deleteMe);
+router.patch("/:userId/delete-MyAccount", userService.deleteMe);
 
 module.exports = router;

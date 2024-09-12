@@ -1,0 +1,144 @@
+const stripe = require('stripe')(process.env.STRIPE_API_KEY);
+const { Product, Cart, CartItem } = require("../models/index");
+const appError = require('../utils/appError');
+
+exports.checkoutSession = async function (req, res, next) {
+
+	try{
+
+      const cartitems = await CartItem.findAll({ where: { cartId: req.user.id }, include: Product});
+
+      if(cartitems.length > 1){
+
+	      cartitems.forEach(products => {
+
+	        const { quantity } = products;
+	        const { name, price} = products.product;
+
+	        async function productdetails(product){
+	    		return await stripe.products.create({
+					name,
+					description: `payment for ${name}`
+		 		});
+			};
+
+			async function productPrice(product){
+		    	return await stripe.prices.create({
+					product: productdetails().id,
+					unit_amount: price * 100,
+		            currency: 'usd',
+				});
+			};
+
+			async function checkoutProduct(){
+			   return await stripe.checkout.sessions.create({
+					payment_method_types: ['card'],
+					success_url: `${req.protocol}://${req.get('host')}/shopmore/success.html`,
+		       		cancel_url: `${req.protocol}://${req.get('host')}/shopmore/user/cancel.html`,
+		       		customer_email: req.user.email,
+		       		client_reference_id: req.params.productId,
+		            mode: 'payment',
+		            currency: 'usd',
+		            line_items: [{
+		            	price: productPrice().id,
+		            	quantity
+		            }]
+				})
+			}
+
+	      });
+
+        };
+
+    
+    	
+
+		
+		// const product = await Product.findByPk(req.params.productId * 1);
+
+		// const products = await stripe.products.create({
+		// 	name: product.name,
+		// 	description: `payment for ${product.name}`
+		// });
+        
+
+		// const price = await stripe.prices.create({
+		// 	product: products.id,
+		// 	unit_amount: product.price * 100,
+  //           currency: 'usd',
+		// });
+
+
+		// const product_list = [];
+
+		// const session = await stripe.checkout.sessions.create({
+		// 	payment_method_types: ['card'],
+		// 	success_url: `${req.protocol}://${req.get('host')}/shopmore/success.html`,
+  //      		cancel_url: `${req.protocol}://${req.get('host')}/shopmore/user/cancel.html`,
+  //      		customer_email: req.user.email,
+  //      		client_reference_id: req.params.productId,
+  //           mode: 'payment',
+  //           currency: 'usd',
+  //           line_items: [{
+  //           	price: price.id,
+  //           	quantity: 1,
+  //           }]
+		// })
+
+		res.status(200).json({
+	        status: "Success",
+	        cartitems
+        });
+
+
+	}catch(err){
+		switch(err.type){
+			case 'StripeCardError':
+       		   next(new appError(`${err.message}`, 400));
+       		   break;
+
+			case 'StripeRateLimitError':
+       		   next(new appError(`${err.message}`, 429));
+       		   break;
+
+			case 'StripeInvalidRequestError':
+       		   next(new appError(`${err.message}`, 400));
+       		   break;
+
+			case 'StripeAPIError':
+       		   next(new appError(`${err.message}`, 400));
+       		   break;
+
+			case 'StripeConnectionError':
+       		   next(new appError(`${err.message}`, 402));
+       		   break;
+
+			case 'StripeAuthecationError':
+       		   next(new appError(`${err.message}`, 403));
+       		   break;
+
+			default:
+       		   next(new appError(`${err.message}`, 400));
+       		   break;
+
+		}
+
+	}
+
+};
+
+exports.webhookCheckout = (req, res, next) => {
+    const signature = req.headers['stripe-signature'];
+	
+	let event;
+	try {
+	    event = stripe.webhooks.constructEvent(req.body, signature);
+	} catch(err){
+		return next(res.status(400).send(`webhook error: ${err.message}`));
+	};
+	
+	
+	if(event.type === 'checkout.session.complete')
+	
+	res.status(200).json({ received: true });
+};
