@@ -7,20 +7,7 @@ const { Product, Category, subCategory } = require("../models/index");
 // const products = JSON.parse(fs.readFileSync(`${__dirname}/data/Category.json`, 'utf-8'));
 // const products = JSON.parse(fs.readFileSync(`${__dirname}/data/products.json`, 'utf-8'));
 
-
-/;
-const products = JSON.parse(fs.readFileSync(path.join(__dirname, "..", `data`, `SubCategories.json`), 'uft8'));
-
-// fs.readFile(products, 'uft8', (err, data) => {
-//     if(err){
-//         console.error("Error reading file:", err);
-//         return
-//     }
-//     console.log("File content", JSON.parse(data));
-// })
-// // const products = require(`../data/products.json`);
-
-console.log(await products)
+const products = JSON.parse(fs.readFileSync(path.join(__dirname, `../data`, `SubCategories.js`)));
 
 
 

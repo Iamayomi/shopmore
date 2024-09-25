@@ -1,12 +1,6 @@
 const sequelize = require("../config/db");
 
-const {
-  User,
-  Review,
-  Product,
-  Category,
-  subCategory,
-} = require("../models/index");
+const { Review, Product } = require("../models/index");
 
 const AppFeature = require("../utils/appFeature");
 const appError = require("./../utils/appError");
@@ -43,8 +37,8 @@ exports.getAllProducts = async function (req, res, next) {
 
     let products = await appProperties.searchProducts();
 
-    if (products.length < 0) {
-      return next(new appError("Empty products", 400));
+    if (products[1].rows.length === 0) {
+      return next(new appError(`This product is not found`, 400));
     }
 
     res.status(200).json({

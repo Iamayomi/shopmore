@@ -1,147 +1,140 @@
 const { DataTypes } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
-
 module.exports = (sequelize) => {
+  const User = sequelize.define(
+    "user",
+    {
+      username: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
 
-	const User = sequelize.define("user", {
+      phoneNumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          checkVal(val) {
+            if (!/^\+?[0-9]+(-?[0-9]+)*$/) {
+              throw new Error("Please provide a valid phone number");
+            }
+          },
+        },
+        unique: true,
+      },
 
-		username: {
-			type: DataTypes.STRING,
-			unique: true
-		},
+      ipAddress: {
+        type: DataTypes.STRING,
+      },
 
-		phoneNumber: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			validate: {
-				checkVal(val) {
-					if (!/^\+?[0-9]+(-?[0-9]+)*$/) {
-						throw new Error('Please provide a valid phone number');
-					}
-				}
-			},
-			unique: true
-		},
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: { isEmail: true },
+        unique: true,
+      },
 
-		ipAddress: {
-			type: DataTypes.STRING,
-		},
+      gender: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+      },
 
-		email: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			validate: { isEmail: true },
-			unique: true
-		},
+      country: {
+        type: DataTypes.STRING,
+      },
 
-		gender: {
-			type: DataTypes.STRING,
-			// allowNull: false,
-		},
+      active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
 
-		country: {
-			type: DataTypes.STRING,
-		},
+      role: {
+        type: DataTypes.STRING,
+        defaultValue: "user",
+      },
 
-		active: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: true
-		},
+      acceptedTerms: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+        validate: {
+          checkVal(val) {
+            if (val !== true) {
+              throw new Error("you did not accept the Term&condition");
+            }
+          },
+        },
+      },
 
-		role: {
-			type: DataTypes.STRING,
-			defaultValue: "user"
+      otp: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
 
-		},
+      otpExpiry: {
+        type: DataTypes.DATE,
+        defaultValue: null,
+      },
 
-		acceptedTerms: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: false,
-			allowNull: false,
-			validate: {
-				checkVal(val) {
-					if (val !== true) {
-						throw new Error('you did not accept the Term&condition');
-					}
-				},
-			},
+      isEmailVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
 
-		},
+      isPhoneVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
 
-		otp: {
-			type: DataTypes.STRING,
-			defaultValue: null,
-		},
+      password: {
+        type: DataTypes.STRING,
+        // allowNull: false,
+        validate: {
+          min: 8,
+        },
+      },
 
-		otpExpiry: {
-			type: DataTypes.DATE,
-			defaultValue: null,
-		},
+      confirmPassword: {
+        type: DataTypes.VIRTUAL,
+        validate: {
+          min: 8,
+        },
+      },
 
-		isEmailVerified: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: false,
-		},
+      userCreatedAt: {
+        type: DataTypes.DATE,
+        defaultValue: Date.now(),
+      },
+    },
+    {
+      timestamps: false,
+    }
+  );
 
-		isPhoneVerified: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: false,
-		},
+  //   User.beforeCreate(async function (user) {
+  //     if (user.password !== user.confirmPassword) {
+  //       throw new Error("Password does not match");
+  //     }
+  //   });
 
-		password: {
-			type: DataTypes.STRING,
-			// allowNull: false,
-			validate: {
-				min: 8
-			}
-		},
+  User.getActiveUsers = async function () {
+    try {
+      const activeUsers = await this.findAll({ where: { active: true } });
+      return activeUsers;
+    } catch (err) {
+      throw new Error("Error fetching active users");
+    }
+  };
 
-		confirmPassword: {
-			type: DataTypes.VIRTUAL,
-			validate: {
-				min: 8
-			}
-		},
+  User.beforeSave(async function (user) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
+  });
 
-		userCreatedAt: {
-			type: DataTypes.DATE,
-			defaultValue: Date.now()
-		}
+  User.comparePassword = async function (signinPassword, userPassword) {
+    return await bcrypt.compare(signinPassword, userPassword);
+  };
 
-	}, {
-		timestamps: false,
-	});
-
-	// User.beforeCreate(async function (user) {
-	// 	if (user.password !== user.confirmPassword) {
-	// 		throw new Error("Password does not match")
-	// 	}
-	// });
-
-	User.getActiveUsers = async function () {
-		try {
-			const activeUsers = await this.findAll({ where: { active: true } });
-			return activeUsers;
-		} catch (err) {
-			throw new Error('Error fetching active users');
-		}
-	};
-
-
-	User.beforeSave(async function (user) {
-		const salt = await bcrypt.genSalt(10)
-		const hashedPassword = await bcrypt.hash(user.password, salt);
-		user.password = hashedPassword;
-	});
-
-	User.comparePassword = async function (signinPassword, userPassword) {
-		return await bcrypt.compare(signinPassword, userPassword);
-	};
-
-	return User;
+  return User;
 };
-
-
-
-
